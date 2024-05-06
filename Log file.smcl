@@ -1,0 +1,1374 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}D:\Practice stata\Log file.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res} 4 Aug 2023, 18:11:31
+
+{com}. use "D:\Practice stata\Main Dataset.dta", clear
+
+. import delimited "D:\Practice stata\New Variables.csv", clear
+{res}{text}(7 vars, 949 obs)
+
+{com}. merge 1:1 uniqueid using "D:\Practice stata\Main Dataset.dta", clear
+{res}{err}option {bf:clear} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. import delimited "D:\Practice stata\New Variables.csv", clear
+{res}{text}(7 vars, 949 obs)
+
+{com}. merge 1:1 uniqueid using "D:\Practice stata\Main Dataset.dta"
+{res}{txt}{p 0 7 2}
+(note: variable
+uniqueid was 
+int, now float to accommodate using data's values)
+{p_end}
+
+{col 5}Result{col 38}# of obs.
+{col 5}{hline 41}
+{col 5}not matched{col 30}{res}              50
+{txt}{col 9}from master{col 30}{res}               0{txt}  (_merge==1)
+{col 9}from using{col 30}{res}              50{txt}  (_merge==2)
+
+{col 5}matched{col 30}{res}             949{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. append using "D:\Practice stata\New Observations.dta"
+{txt}(label treatment already defined)
+(label gender already defined)
+(label occup already defined)
+(label castecode already defined)
+(label standard already defined)
+(label yesno already defined)
+(label yes1no0 already defined)
+
+{com}. append using "D:\Practice stata\New Observations.dta"
+{txt}(label treatment already defined)
+(label gender already defined)
+(label occup already defined)
+(label castecode already defined)
+(label standard already defined)
+(label yesno already defined)
+(label yes1no0 already defined)
+
+{com}. sum income age surveytime
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 6}income {c |}{res}      1,003    2504.213    1028.222          0       6051
+{txt}{space 9}age {c |}{res}      1,002    334.0379    691.0885         18       1990
+{txt}{space 2}surveytime {c |}{res}      1,003    7196.553    984.5912       3757      10208
+
+{com}. estpost summarize income age surveytime, listwise
+
+{txt}{space 0}{space 0}{ralign 12:}{space 1}{c |}{space 1}{ralign 9:e(count)}{space 1}{space 1}{ralign 9:e(sum_w)}{space 1}{space 1}{ralign 9:e(mean)}{space 1}{space 1}{ralign 9:e(Var)}{space 1}{space 1}{ralign 9:e(sd)}{space 1}{space 1}{ralign 9:e(min)}{space 1}{space 1}{ralign 9:e(max)}{space 1}{space 1}{ralign 9:e(sum)}{space 1}
+{space 0}{hline 13}{c   +}{hline 11}{hline 11}{hline 11}{hline 11}{hline 11}{hline 11}{hline 11}{hline 11}
+{space 0}{space 0}{ralign 12:income}{space 1}{c |}{space 1}{ralign 9:{res:{sf:     1002}}}{space 1}{space 1}{ralign 9:{res:{sf:     1002}}}{space 1}{space 1}{ralign 9:{res:{sf: 2504.394}}}{space 1}{space 1}{ralign 9:{res:{sf:  1058264}}}{space 1}{space 1}{ralign 9:{res:{sf:  1028.72}}}{space 1}{space 1}{ralign 9:{res:{sf:        0}}}{space 1}{space 1}{ralign 9:{res:{sf:     6051}}}{space 1}{space 1}{ralign 9:{res:{sf:  2509403}}}{space 1}
+{space 0}{space 0}{ralign 12:age}{space 1}{c |}{space 1}{ralign 9:{res:{sf:     1002}}}{space 1}{space 1}{ralign 9:{res:{sf:     1002}}}{space 1}{space 1}{ralign 9:{res:{sf: 334.0379}}}{space 1}{space 1}{ralign 9:{res:{sf: 477603.3}}}{space 1}{space 1}{ralign 9:{res:{sf: 691.0885}}}{space 1}{space 1}{ralign 9:{res:{sf:       18}}}{space 1}{space 1}{ralign 9:{res:{sf:     1990}}}{space 1}{space 1}{ralign 9:{res:{sf:   334706}}}{space 1}
+{space 0}{space 0}{ralign 12:surveytime}{space 1}{c |}{space 1}{ralign 9:{res:{sf:     1002}}}{space 1}{space 1}{ralign 9:{res:{sf:     1002}}}{space 1}{space 1}{ralign 9:{res:{sf: 7194.758}}}{space 1}{space 1}{ralign 9:{res:{sf: 967153.9}}}{space 1}{space 1}{ralign 9:{res:{sf: 983.4398}}}{space 1}{space 1}{ralign 9:{res:{sf:     3757}}}{space 1}{space 1}{ralign 9:{res:{sf:    10208}}}{space 1}{space 1}{ralign 9:{res:{sf:  7209148}}}{space 1}
+
+{com}. esttab, cells("mean sd min max") nomtitle nonumber
+{res}
+{txt}{hline 64}
+{txt}                     mean           sd          min          max
+{txt}{hline 64}
+{txt}income      {res}     2504.394      1028.72            0         6051{txt}
+{txt}age         {res}     334.0379     691.0885           18         1990{txt}
+{txt}surveytime  {res}     7194.758     983.4398         3757        10208{txt}
+{txt}{hline 64}
+{txt}N           {res}         1002                                       {txt}
+{txt}{hline 64}
+
+{com}. eststo: quietly summarize income age surveytime
+{txt}({res}est1{txt} stored)
+
+{com}. esttab, cells("mean(fmt(%9.2f)) median(fmt(%9.2f)) sd(fmt(%9.2f))") title("Summary Statistics") label
+{res}
+{txt}Summary Statistics
+{txt}{hline 59}
+{txt}                              (1)                          
+{txt}                                                           
+{txt}                             mean       median           sd
+{txt}{hline 59}
+{txt}Weekly income       {res}      2504.39                   1028.72{txt}
+{txt}How old are you?    {res}       334.04                    691.09{txt}
+{txt}Length of Survey (~){res}      7194.76                    983.44{txt}
+{txt}{hline 59}
+{txt}Observations        {res}         1002                          {txt}
+{txt}{hline 59}
+
+{com}. esttab, cells("mean(fmt(%9.2f))  sd(fmt(%9.2f))") title("Summary Statistics") label
+{res}
+{txt}Summary Statistics
+{txt}{hline 46}
+{txt}                              (1)             
+{txt}                                              
+{txt}                             mean           sd
+{txt}{hline 46}
+{txt}Weekly income       {res}      2504.39      1028.72{txt}
+{txt}How old are you?    {res}       334.04       691.09{txt}
+{txt}Length of Survey (~){res}      7194.76       983.44{txt}
+{txt}{hline 46}
+{txt}Observations        {res}         1002             {txt}
+{txt}{hline 46}
+
+{com}. duplicates report hhid
+
+{p 0 4}{txt}Duplicates in terms of {res} hhid{p_end}
+
+{txt}{hline 10}{c TT}{hline 27}
+   copies {c |} observations       surplus
+{hline 10}{c +}{hline 27}
+        1 {c |}          {res}993             0
+        {txt}2 {c |}           {res}10             5
+{txt}{hline 10}{c BT}{hline 27}
+
+{com}. duplicates report
+
+{p 0 4}{txt}Duplicates in terms of {txt} all variables{p_end}
+
+{hline 10}{c TT}{hline 27}
+   copies {c |} observations       surplus
+{hline 10}{c +}{hline 27}
+        1 {c |}          {res}999             0
+        {txt}2 {c |}            {res}4             2
+{txt}{hline 10}{c BT}{hline 27}
+
+{com}. duplicates list, sepby(hhid)
+
+{p 0 4}{txt}Duplicates in terms of {txt} all variables{p_end}
+
+  {c TLC}{hline 8}{c TT}{hline 6}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 6}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 9}{c TT}{hline 10}{c TT}{hline 11}{c TRC}
+  {c |} group: {c |} obs: {c |} uniqueid {c |} survey~2 {c |} thanav~2 {c |} exit {c |} base_age {c |} base_i~e {c |} base_e~c {c |}    hhid {c |} surveyid {c |} surveyor  {c |}
+  {c |} {res}     1 {txt}{c |} {res}1000 {txt}{c |} {res}    1000 {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}   . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}         {txt}{c |} {res}2025087 {txt}{c |} {res}     972 {txt}{c |} {res}    Mary  {txt}{c |}
+  {c LT}{hline 8}{c BT}{hline 1}{c TT}{hline 4}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 5}{c TT}{c BT}{hline 9}{c TT}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 2}{c TT}{hline 7}{c BT}{hline 9}{c BT}{hline 1}{c TT}{hline 8}{c +}{hline 11}{c RT}
+  {c |} surv~ate {c |} surve~me {c |} surv~ete {c |} superp~t {c |} scruti~n {c |} backch~n {c |}    sex {c |} age {c |}              educ {c |} income {c |} addres~r  {c |}
+  {c |} {res}08232013 {txt}{c |} {res}    6432 {txt}{c |} {res}     Yes {txt}{c |} {res}      No {txt}{c |} {res}     Yes {txt}{c |} {res}     Yes {txt}{c |} {res}Female {txt}{c |} {res} 40 {txt}{c |} {res}None or anganwadi {txt}{c |} {res}  3138 {txt}{c |} {res}      40  {txt}{c |}
+  {c LT}{hline 10}{c +}{hline 9}{c TT}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c BT}{hline 10}{c BT}{hline 10}{c BT}{hline 8}{c BT}{hline 5}{c BT}{hline 7}{c TT}{hline 10}{c TT}{c BT}{hline 8}{c BT}{c TT}{hline 10}{c RT}
+  {c |} addres~t {c |} areadur {c |} areadu~t {c |}                                             occupation {c |} occupa~r {c |} casten~e {c |} castec~e {c |}
+  {c |} {res}       1 {txt}{c |} {res}     40 {txt}{c |} {res}       2 {txt}{c |} {res}                                  Farming or livestock {txt}{c |} {res}         {txt}{c |} {res}   MEENA {txt}{c |} {res}       . {txt}{c |}
+  {c LT}{hline 10}{c +}{hline 9}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 7}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 11}{c TT}{hline 11}{c TT}{hline 2}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c RT}
+  {c |} litera~n {c |}       treatment {c |} own4wh~n {c |} own4wh.. {c |} own4wh~e {c |} own4wh~t  {c |} own4wh..  {c |} theftf~n  {c |} theftf~m  {c |} own2wh~n  {c |}
+  {c |} {res}      No {txt}{c |} {res}Treatment Group {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |}
+  {c LT}{hline 10}{c +}{hline 10}{c TT}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 3}{c TT}{hline 7}{c BT}{hline 2}{c TT}{hline 8}{c BT}{hline 1}{c TT}{hline 9}{c BT}{c TT}{hline 10}{c +}{hline 11}{c RT}
+  {c |} own2wh.. {c |} own2wh~e {c |} own2wh~t {c |} own2wh.. {c |} own2wh~1 {c |} own2wh~2 {c |} cycleo~n {c |} cycleo~m {c |} cycleo~e {c |} cyclet~n {c |} cyclet~m  {c |}
+  {c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |}
+  {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c RT}
+  {c |} cyclet~1 {c |} cyclet~2 {c |} burgla~n {c |} burgla~m {c |} attemp~n {c |} attemp~m {c |} vandal~n {c |} vandal~m {c |} trespa~n {c |} trespa~m {c |} robber~n  {c |}
+  {c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       2  {txt}{c |}
+  {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 9}{c TT}{c BT}{hline 9}{c TT}{c BT}{hline 9}{c TT}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c +}{hline 10}{c BT}{c TT}{hline 9}{c BT}{hline 1}{c TT}{hline 9}{c RT}
+  {c |} robber~m {c |} robber~1 {c |} robber~2 {c |} theftyn {c |} theftnum {c |} theftv~1 {c |} theftv~2 {c |} thana~yn  {c |} thana~on  {c |} thanav~r  {c |} _merge  {c |}
+  {c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}     No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}      No  {txt}{c |} {res}          {txt}{c |} {res}          {txt}{c |} {res}     .  {txt}{c |}
+  {c BLC}{hline 10}{c BT}{hline 10}{c BT}{hline 10}{c BT}{hline 9}{c BT}{hline 10}{c BT}{hline 10}{c BT}{hline 10}{c BT}{hline 11}{c BT}{hline 11}{c BT}{hline 11}{c BT}{hline 9}{c BRC}
+
+  {c TLC}{hline 8}{c TT}{hline 6}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 6}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 9}{c TT}{hline 10}{c TT}{hline 11}{c TRC}
+  {c |} group: {c |} obs: {c |} uniqueid {c |} survey~2 {c |} thanav~2 {c |} exit {c |} base_age {c |} base_i~e {c |} base_e~c {c |}    hhid {c |} surveyid {c |} surveyor  {c |}
+  {c |} {res}     1 {txt}{c |} {res}1002 {txt}{c |} {res}    1000 {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}   . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}         {txt}{c |} {res}2025087 {txt}{c |} {res}     972 {txt}{c |} {res}    Mary  {txt}{c |}
+  {c LT}{hline 8}{c BT}{hline 1}{c TT}{hline 4}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 5}{c TT}{c BT}{hline 9}{c TT}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 2}{c TT}{hline 7}{c BT}{hline 9}{c BT}{hline 1}{c TT}{hline 8}{c +}{hline 11}{c RT}
+  {c |} surv~ate {c |} surve~me {c |} surv~ete {c |} superp~t {c |} scruti~n {c |} backch~n {c |}    sex {c |} age {c |}              educ {c |} income {c |} addres~r  {c |}
+  {c |} {res}08232013 {txt}{c |} {res}    6432 {txt}{c |} {res}     Yes {txt}{c |} {res}      No {txt}{c |} {res}     Yes {txt}{c |} {res}     Yes {txt}{c |} {res}Female {txt}{c |} {res} 40 {txt}{c |} {res}None or anganwadi {txt}{c |} {res}  3138 {txt}{c |} {res}      40  {txt}{c |}
+  {c LT}{hline 10}{c +}{hline 9}{c TT}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c BT}{hline 10}{c BT}{hline 10}{c BT}{hline 8}{c BT}{hline 5}{c BT}{hline 7}{c TT}{hline 10}{c TT}{c BT}{hline 8}{c BT}{c TT}{hline 10}{c RT}
+  {c |} addres~t {c |} areadur {c |} areadu~t {c |}                                             occupation {c |} occupa~r {c |} casten~e {c |} castec~e {c |}
+  {c |} {res}       1 {txt}{c |} {res}     40 {txt}{c |} {res}       2 {txt}{c |} {res}                                  Farming or livestock {txt}{c |} {res}         {txt}{c |} {res}   MEENA {txt}{c |} {res}       . {txt}{c |}
+  {c LT}{hline 10}{c +}{hline 9}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 7}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 11}{c TT}{hline 11}{c TT}{hline 2}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c RT}
+  {c |} litera~n {c |}       treatment {c |} own4wh~n {c |} own4wh.. {c |} own4wh~e {c |} own4wh~t  {c |} own4wh..  {c |} theftf~n  {c |} theftf~m  {c |} own2wh~n  {c |}
+  {c |} {res}      No {txt}{c |} {res}Treatment Group {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |}
+  {c LT}{hline 10}{c +}{hline 10}{c TT}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 3}{c TT}{hline 7}{c BT}{hline 2}{c TT}{hline 8}{c BT}{hline 1}{c TT}{hline 9}{c BT}{c TT}{hline 10}{c +}{hline 11}{c RT}
+  {c |} own2wh.. {c |} own2wh~e {c |} own2wh~t {c |} own2wh.. {c |} own2wh~1 {c |} own2wh~2 {c |} cycleo~n {c |} cycleo~m {c |} cycleo~e {c |} cyclet~n {c |} cyclet~m  {c |}
+  {c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |}
+  {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c RT}
+  {c |} cyclet~1 {c |} cyclet~2 {c |} burgla~n {c |} burgla~m {c |} attemp~n {c |} attemp~m {c |} vandal~n {c |} vandal~m {c |} trespa~n {c |} trespa~m {c |} robber~n  {c |}
+  {c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       2  {txt}{c |}
+  {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 9}{c TT}{c BT}{hline 9}{c TT}{c BT}{hline 9}{c TT}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c +}{hline 10}{c BT}{c TT}{hline 9}{c BT}{hline 1}{c TT}{hline 9}{c RT}
+  {c |} robber~m {c |} robber~1 {c |} robber~2 {c |} theftyn {c |} theftnum {c |} theftv~1 {c |} theftv~2 {c |} thana~yn  {c |} thana~on  {c |} thanav~r  {c |} _merge  {c |}
+  {c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}     No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}      No  {txt}{c |} {res}          {txt}{c |} {res}          {txt}{c |} {res}     .  {txt}{c |}
+  {c BLC}{hline 10}{c BT}{hline 10}{c BT}{hline 10}{c BT}{hline 9}{c BT}{hline 10}{c BT}{hline 10}{c BT}{hline 10}{c BT}{hline 11}{c BT}{hline 11}{c BT}{hline 11}{c BT}{hline 9}{c BRC}
+
+  {c TLC}{hline 8}{c TT}{hline 6}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 6}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 9}{c TT}{hline 10}{c TT}{hline 11}{c TRC}
+  {c |} group: {c |} obs: {c |} uniqueid {c |} survey~2 {c |} thanav~2 {c |} exit {c |} base_age {c |} base_i~e {c |} base_e~c {c |}    hhid {c |} surveyid {c |} surveyor  {c |}
+  {c |} {res}     2 {txt}{c |} {res}1001 {txt}{c |} {res}    1001 {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}   . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}         {txt}{c |} {res}2025097 {txt}{c |} {res}     969 {txt}{c |} {res}    Mary  {txt}{c |}
+  {c LT}{hline 8}{c BT}{hline 1}{c TT}{hline 4}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 5}{c TT}{c BT}{hline 9}{c TT}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 2}{c TT}{hline 7}{c BT}{hline 9}{c BT}{hline 1}{c TT}{hline 8}{c +}{hline 11}{c RT}
+  {c |} surv~ate {c |} surve~me {c |} surv~ete {c |} superp~t {c |} scruti~n {c |} backch~n {c |}    sex {c |} age {c |}              educ {c |} income {c |} addres~r  {c |}
+  {c |} {res}11162014 {txt}{c |} {res}    8474 {txt}{c |} {res}     Yes {txt}{c |} {res}      No {txt}{c |} {res}     Yes {txt}{c |} {res}      No {txt}{c |} {res}  Male {txt}{c |} {res} 30 {txt}{c |} {res}                2 {txt}{c |} {res}   219 {txt}{c |} {res}      39  {txt}{c |}
+  {c LT}{hline 10}{c +}{hline 9}{c TT}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c BT}{hline 10}{c BT}{hline 10}{c BT}{hline 8}{c BT}{hline 5}{c BT}{hline 7}{c TT}{hline 10}{c TT}{c BT}{hline 8}{c BT}{c TT}{hline 10}{c RT}
+  {c |} addres~t {c |} areadur {c |} areadu~t {c |}                                             occupation {c |} occupa~r {c |} casten~e {c |} castec~e {c |}
+  {c |} {res}       1 {txt}{c |} {res}     30 {txt}{c |} {res}       2 {txt}{c |} {res}Employed for not farm related wage work. (not teacher) {txt}{c |} {res}         {txt}{c |} {res}   MEENA {txt}{c |} {res}       . {txt}{c |}
+  {c LT}{hline 10}{c +}{hline 9}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 7}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 11}{c TT}{hline 11}{c TT}{hline 2}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c RT}
+  {c |} litera~n {c |}       treatment {c |} own4wh~n {c |} own4wh.. {c |} own4wh~e {c |} own4wh~t  {c |} own4wh..  {c |} theftf~n  {c |} theftf~m  {c |} own2wh~n  {c |}
+  {c |} {res}      No {txt}{c |} {res}  Control Group {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |}
+  {c LT}{hline 10}{c +}{hline 10}{c TT}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 3}{c TT}{hline 7}{c BT}{hline 2}{c TT}{hline 8}{c BT}{hline 1}{c TT}{hline 9}{c BT}{c TT}{hline 10}{c +}{hline 11}{c RT}
+  {c |} own2wh.. {c |} own2wh~e {c |} own2wh~t {c |} own2wh.. {c |} own2wh~1 {c |} own2wh~2 {c |} cycleo~n {c |} cycleo~m {c |} cycleo~e {c |} cyclet~n {c |} cyclet~m  {c |}
+  {c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |}
+  {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c RT}
+  {c |} cyclet~1 {c |} cyclet~2 {c |} burgla~n {c |} burgla~m {c |} attemp~n {c |} attemp~m {c |} vandal~n {c |} vandal~m {c |} trespa~n {c |} trespa~m {c |} robber~n  {c |}
+  {c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       2  {txt}{c |}
+  {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 9}{c TT}{c BT}{hline 9}{c TT}{c BT}{hline 9}{c TT}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c +}{hline 10}{c BT}{c TT}{hline 9}{c BT}{hline 1}{c TT}{hline 9}{c RT}
+  {c |} robber~m {c |} robber~1 {c |} robber~2 {c |} theftyn {c |} theftnum {c |} theftv~1 {c |} theftv~2 {c |} thana~yn  {c |} thana~on  {c |} thanav~r  {c |} _merge  {c |}
+  {c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}     No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}      No  {txt}{c |} {res}          {txt}{c |} {res}          {txt}{c |} {res}     .  {txt}{c |}
+  {c BLC}{hline 10}{c BT}{hline 10}{c BT}{hline 10}{c BT}{hline 9}{c BT}{hline 10}{c BT}{hline 10}{c BT}{hline 10}{c BT}{hline 11}{c BT}{hline 11}{c BT}{hline 11}{c BT}{hline 9}{c BRC}
+
+  {c TLC}{hline 8}{c TT}{hline 6}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 6}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 9}{c TT}{hline 10}{c TT}{hline 11}{c TRC}
+  {c |} group: {c |} obs: {c |} uniqueid {c |} survey~2 {c |} thanav~2 {c |} exit {c |} base_age {c |} base_i~e {c |} base_e~c {c |}    hhid {c |} surveyid {c |} surveyor  {c |}
+  {c |} {res}     2 {txt}{c |} {res}1003 {txt}{c |} {res}    1001 {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}   . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}         {txt}{c |} {res}2025097 {txt}{c |} {res}     969 {txt}{c |} {res}    Mary  {txt}{c |}
+  {c LT}{hline 8}{c BT}{hline 1}{c TT}{hline 4}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 5}{c TT}{c BT}{hline 9}{c TT}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 2}{c TT}{hline 7}{c BT}{hline 9}{c BT}{hline 1}{c TT}{hline 8}{c +}{hline 11}{c RT}
+  {c |} surv~ate {c |} surve~me {c |} surv~ete {c |} superp~t {c |} scruti~n {c |} backch~n {c |}    sex {c |} age {c |}              educ {c |} income {c |} addres~r  {c |}
+  {c |} {res}11162014 {txt}{c |} {res}    8474 {txt}{c |} {res}     Yes {txt}{c |} {res}      No {txt}{c |} {res}     Yes {txt}{c |} {res}      No {txt}{c |} {res}  Male {txt}{c |} {res} 30 {txt}{c |} {res}                2 {txt}{c |} {res}   219 {txt}{c |} {res}      39  {txt}{c |}
+  {c LT}{hline 10}{c +}{hline 9}{c TT}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c BT}{hline 10}{c BT}{hline 10}{c BT}{hline 8}{c BT}{hline 5}{c BT}{hline 7}{c TT}{hline 10}{c TT}{c BT}{hline 8}{c BT}{c TT}{hline 10}{c RT}
+  {c |} addres~t {c |} areadur {c |} areadu~t {c |}                                             occupation {c |} occupa~r {c |} casten~e {c |} castec~e {c |}
+  {c |} {res}       1 {txt}{c |} {res}     30 {txt}{c |} {res}       2 {txt}{c |} {res}Employed for not farm related wage work. (not teacher) {txt}{c |} {res}         {txt}{c |} {res}   MEENA {txt}{c |} {res}       . {txt}{c |}
+  {c LT}{hline 10}{c +}{hline 9}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 7}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 11}{c TT}{hline 11}{c TT}{hline 2}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c RT}
+  {c |} litera~n {c |}       treatment {c |} own4wh~n {c |} own4wh.. {c |} own4wh~e {c |} own4wh~t  {c |} own4wh..  {c |} theftf~n  {c |} theftf~m  {c |} own2wh~n  {c |}
+  {c |} {res}      No {txt}{c |} {res}  Control Group {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |}
+  {c LT}{hline 10}{c +}{hline 10}{c TT}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 3}{c TT}{hline 7}{c BT}{hline 2}{c TT}{hline 8}{c BT}{hline 1}{c TT}{hline 9}{c BT}{c TT}{hline 10}{c +}{hline 11}{c RT}
+  {c |} own2wh.. {c |} own2wh~e {c |} own2wh~t {c |} own2wh.. {c |} own2wh~1 {c |} own2wh~2 {c |} cycleo~n {c |} cycleo~m {c |} cycleo~e {c |} cyclet~n {c |} cyclet~m  {c |}
+  {c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |}
+  {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c RT}
+  {c |} cyclet~1 {c |} cyclet~2 {c |} burgla~n {c |} burgla~m {c |} attemp~n {c |} attemp~m {c |} vandal~n {c |} vandal~m {c |} trespa~n {c |} trespa~m {c |} robber~n  {c |}
+  {c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       2  {txt}{c |}
+  {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 9}{c TT}{c BT}{hline 9}{c TT}{c BT}{hline 9}{c TT}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c +}{hline 10}{c BT}{c TT}{hline 9}{c BT}{hline 1}{c TT}{hline 9}{c RT}
+  {c |} robber~m {c |} robber~1 {c |} robber~2 {c |} theftyn {c |} theftnum {c |} theftv~1 {c |} theftv~2 {c |} thana~yn  {c |} thana~on  {c |} thanav~r  {c |} _merge  {c |}
+  {c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}     No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}      No  {txt}{c |} {res}          {txt}{c |} {res}          {txt}{c |} {res}     .  {txt}{c |}
+  {c BLC}{hline 10}{c BT}{hline 10}{c BT}{hline 10}{c BT}{hline 9}{c BT}{hline 10}{c BT}{hline 10}{c BT}{hline 10}{c BT}{hline 11}{c BT}{hline 11}{c BT}{hline 11}{c BT}{hline 9}{c BRC}
+
+{com}. 
+. duplicates list hhid, generate(dupount)
+
+{p 0 4}{txt}Duplicates in terms of {res} hhid{p_end}
+{err}option {bf:generate()} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. duplicates tag hhid, gen(nonmcopies)
+
+{p 0 4}{txt}Duplicates in terms of {res} hhid{p_end}
+
+{com}. list if nonmcopies >==1,sepby(hhid)
+{err}nonmcopies> invalid name
+{txt}{search r(198), local:r(198);}
+
+{com}. list if nonmcopies >==1,sepby(hhid)
+{err}nonmcopies> invalid name
+{txt}{search r(198), local:r(198);}
+
+{com}. list if nonmcopies >=1,sepby(hhid)
+
+      {txt}{c TLC}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 6}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 19}{c TT}{hline 10}{c TT}{hline 11}{c TT}{hline 11}{c TRC}
+ 564. {c |} uniqueid {c |} survey~2 {c |} thanav~2 {c |} exit {c |} base_age {c |} base_i~e {c |}         base_educ {c |}    hhid  {c |} surveyid  {c |} surveyor  {c |}
+      {c |} {res}     597 {txt}{c |} {res}   110.8 {txt}{c |} {res}       . {txt}{c |} {res}   1 {txt}{c |} {res}      37 {txt}{c |} {res}    3803 {txt}{c |} {res}               12 {txt}{c |} {res}1802011  {txt}{c |} {res}     666  {txt}{c |} {res}Benjamin  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 4}{c TT}{hline 5}{c BT}{hline 5}{c TT}{hline 9}{c TT}{hline 3}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 11}{c BT}{hline 1}{c TT}{hline 9}{c RT}
+      {c |} surv~ate {c |} surve~me {c |} surv~ete {c |} superp~t {c |} scruti~n  {c |} backch~n  {c |}    sex  {c |}  age  {c |}              educ  {c |} income  {c |}
+      {c |} {res}10202014 {txt}{c |} {res}    6648 {txt}{c |} {res}     Yes {txt}{c |} {res}      No {txt}{c |} {res}     Yes  {txt}{c |} {res}     Yes  {txt}{c |} {res}Female  {txt}{c |} {res}  38  {txt}{c |} {res}               12  {txt}{c |} {res}  1048  {txt}{c |}
+      {c LT}{hline 10}{c BT}{c TT}{hline 9}{c BT}{hline 1}{c TT}{hline 8}{c BT}{hline 1}{c TT}{hline 8}{c BT}{hline 2}{c TT}{hline 8}{c BT}{hline 11}{c BT}{hline 9}{c BT}{hline 7}{c BT}{hline 18}{c TT}{hline 1}{c BT}{hline 9}{c RT}
+      {c |} addres~r  {c |} addres~t  {c |} areadur  {c |} areadu~t  {c |}                                             occupation  {c |} occupa~r  {c |}
+      {c |} {res}      42  {txt}{c |} {res}       1  {txt}{c |} {res}     42  {txt}{c |} {res}       1  {txt}{c |} {res}      Manual labor on other people’s land, farm, house  {txt}{c |} {res}          {txt}{c |}
+      {c LT}{hline 10}{c TT}{c BT}{hline 9}{c TT}{hline 1}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 11}{c BT}{hline 3}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 9}{c BT}{c TT}{hline 10}{c RT}
+      {c |} casten~e {c |} castec~e {c |} litera~n {c |}       treatment {c |} own4wh~n {c |} own4wh.. {c |} own4wh~e {c |} own4wh~t {c |} own4wh.. {c |} theftf~n {c |}
+      {c |} {res} BRAHMAN {txt}{c |} {res} General {txt}{c |} {res}     Yes {txt}{c |} {res}Treatment Group {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c TT}{hline 5}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 6}{c TT}{hline 3}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c RT}
+      {c |} theftf~m {c |} own2wh~n {c |} own2wh.. {c |} own2wh~e  {c |} own2wh~t  {c |} own2wh..  {c |} own2wh~1  {c |} own2wh~2  {c |} cycleo~n  {c |} cycleo~m  {c |}
+      {c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}     Yes  {txt}{c |} {res}       1  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c RT}
+      {c |} cycleo~e {c |} cyclet~n {c |} cyclet~m {c |} cyclet~1  {c |} cyclet~2  {c |} burgla~n  {c |} burgla~m  {c |} attemp~n  {c |} attemp~m  {c |} vandal~n  {c |}
+      {c |} {res}    3335 {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c +}{hline 11}{c +}{hline 11}{c RT}
+      {c |} vandal~m {c |} trespa~n {c |} trespa~m  {c |} robber~n  {c |} robber~m  {c |} robber~1  {c |} robber~2  {c |} theftyn  {c |} theftnum  {c |} theftv~1  {c |}
+      {c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       .  {txt}{c |} {res}       2  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}     No  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |}
+      {c LT}{hline 10}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 11}{c BT}{hline 3}{c TT}{hline 7}{c BT}{hline 10}{c TT}{c BT}{hline 11}{c BT}{hline 5}{c TT}{hline 5}{c BT}{hline 10}{c BT}{hline 4}{c TT}{hline 6}{c BT}{hline 11}{c RT}
+      {c |}     theftv~2     {c |}     thana~yn     {c |}     thana~on     {c |}     thanav~r     {c |}          _merge     {c |}     nonmco~s     {c |}
+      {c |}     {res}       .     {txt}{c |}     {res}      No     {txt}{c |}     {res}             {txt}{c |}     {res}             {txt}{c |}     {res}matched (3)     {txt}{c |}     {res}       1     {txt}{c |}
+      {c BLC}{hline 18}{c BT}{hline 18}{c BT}{hline 18}{c BT}{hline 18}{c BT}{hline 21}{c BT}{hline 18}{c BRC}
+
+      {c TLC}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 6}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 19}{c TT}{hline 10}{c TT}{hline 11}{c TT}{hline 11}{c TRC}
+ 565. {c |} uniqueid {c |} survey~2 {c |} thanav~2 {c |} exit {c |} base_age {c |} base_i~e {c |}         base_educ {c |}    hhid  {c |} surveyid  {c |} surveyor  {c |}
+      {c |} {res}     598 {txt}{c |} {res}   118.3 {txt}{c |} {res}       . {txt}{c |} {res}   1 {txt}{c |} {res}      37 {txt}{c |} {res}    1508 {txt}{c |} {res}               12 {txt}{c |} {res}1802011  {txt}{c |} {res}     640  {txt}{c |} {res}     Sam  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 4}{c TT}{hline 5}{c BT}{hline 5}{c TT}{hline 9}{c TT}{hline 3}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 11}{c BT}{hline 1}{c TT}{hline 9}{c RT}
+      {c |} surv~ate {c |} surve~me {c |} surv~ete {c |} superp~t {c |} scruti~n  {c |} backch~n  {c |}    sex  {c |}  age  {c |}              educ  {c |} income  {c |}
+      {c |} {res}09172013 {txt}{c |} {res}    7098 {txt}{c |} {res}     Yes {txt}{c |} {res}      No {txt}{c |} {res}     Yes  {txt}{c |} {res}     Yes  {txt}{c |} {res}Female  {txt}{c |} {res}  38  {txt}{c |} {res}               12  {txt}{c |} {res}  1627  {txt}{c |}
+      {c LT}{hline 10}{c BT}{c TT}{hline 9}{c BT}{hline 1}{c TT}{hline 8}{c BT}{hline 1}{c TT}{hline 8}{c BT}{hline 2}{c TT}{hline 8}{c BT}{hline 11}{c BT}{hline 9}{c BT}{hline 7}{c BT}{hline 18}{c TT}{hline 1}{c BT}{hline 9}{c RT}
+      {c |} addres~r  {c |} addres~t  {c |} areadur  {c |} areadu~t  {c |}                                             occupation  {c |} occupa~r  {c |}
+      {c |} {res}      42  {txt}{c |} {res}       1  {txt}{c |} {res}     42  {txt}{c |} {res}       1  {txt}{c |} {res}      Manual labor on other people’s land, farm, house  {txt}{c |} {res}          {txt}{c |}
+      {c LT}{hline 10}{c TT}{c BT}{hline 9}{c TT}{hline 1}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 11}{c BT}{hline 3}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 9}{c BT}{c TT}{hline 10}{c RT}
+      {c |} casten~e {c |} castec~e {c |} litera~n {c |}       treatment {c |} own4wh~n {c |} own4wh.. {c |} own4wh~e {c |} own4wh~t {c |} own4wh.. {c |} theftf~n {c |}
+      {c |} {res} BRAHMAN {txt}{c |} {res} General {txt}{c |} {res}     Yes {txt}{c |} {res}Treatment Group {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c TT}{hline 5}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 6}{c TT}{hline 3}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c RT}
+      {c |} theftf~m {c |} own2wh~n {c |} own2wh.. {c |} own2wh~e  {c |} own2wh~t  {c |} own2wh..  {c |} own2wh~1  {c |} own2wh~2  {c |} cycleo~n  {c |} cycleo~m  {c |}
+      {c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}     Yes  {txt}{c |} {res}       1  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c RT}
+      {c |} cycleo~e {c |} cyclet~n {c |} cyclet~m {c |} cyclet~1  {c |} cyclet~2  {c |} burgla~n  {c |} burgla~m  {c |} attemp~n  {c |} attemp~m  {c |} vandal~n  {c |}
+      {c |} {res}    3392 {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c +}{hline 11}{c +}{hline 11}{c RT}
+      {c |} vandal~m {c |} trespa~n {c |} trespa~m  {c |} robber~n  {c |} robber~m  {c |} robber~1  {c |} robber~2  {c |} theftyn  {c |} theftnum  {c |} theftv~1  {c |}
+      {c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       .  {txt}{c |} {res}       2  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}     No  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |}
+      {c LT}{hline 10}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 11}{c BT}{hline 3}{c TT}{hline 7}{c BT}{hline 10}{c TT}{c BT}{hline 11}{c BT}{hline 5}{c TT}{hline 5}{c BT}{hline 10}{c BT}{hline 4}{c TT}{hline 6}{c BT}{hline 11}{c RT}
+      {c |}     theftv~2     {c |}     thana~yn     {c |}     thana~on     {c |}     thanav~r     {c |}          _merge     {c |}     nonmco~s     {c |}
+      {c |}     {res}       .     {txt}{c |}     {res}      No     {txt}{c |}     {res}             {txt}{c |}     {res}             {txt}{c |}     {res}matched (3)     {txt}{c |}     {res}       1     {txt}{c |}
+      {c BLC}{hline 18}{c BT}{hline 18}{c BT}{hline 18}{c BT}{hline 18}{c BT}{hline 21}{c BT}{hline 18}{c BRC}
+
+      {c TLC}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 6}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 19}{c TT}{hline 10}{c TT}{hline 11}{c TT}{hline 11}{c TRC}
+ 605. {c |} uniqueid {c |} survey~2 {c |} thanav~2 {c |} exit {c |} base_age {c |} base_i~e {c |}         base_educ {c |}    hhid  {c |} surveyid  {c |} surveyor  {c |}
+      {c |} {res}     641 {txt}{c |} {res}  126.35 {txt}{c |} {res}       . {txt}{c |} {res}   1 {txt}{c |} {res}      29 {txt}{c |} {res}    4252 {txt}{c |} {res}None or anganwadi {txt}{c |} {res}1807077  {txt}{c |} {res}     981  {txt}{c |} {res}     Sam  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 4}{c TT}{hline 5}{c BT}{hline 5}{c TT}{hline 9}{c TT}{hline 3}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 11}{c BT}{hline 1}{c TT}{hline 9}{c RT}
+      {c |} surv~ate {c |} surve~me {c |} surv~ete {c |} superp~t {c |} scruti~n  {c |} backch~n  {c |}    sex  {c |}  age  {c |}              educ  {c |} income  {c |}
+      {c |} {res}10112014 {txt}{c |} {res}    7581 {txt}{c |} {res}     Yes {txt}{c |} {res}      No {txt}{c |} {res}     Yes  {txt}{c |} {res}      No  {txt}{c |} {res}  Male  {txt}{c |} {res}  30  {txt}{c |} {res}None or anganwadi  {txt}{c |} {res}  3601  {txt}{c |}
+      {c LT}{hline 10}{c BT}{c TT}{hline 9}{c BT}{hline 1}{c TT}{hline 8}{c BT}{hline 1}{c TT}{hline 8}{c BT}{hline 2}{c TT}{hline 8}{c BT}{hline 11}{c BT}{hline 9}{c BT}{hline 7}{c BT}{hline 18}{c TT}{hline 1}{c BT}{hline 9}{c RT}
+      {c |} addres~r  {c |} addres~t  {c |} areadur  {c |} areadu~t  {c |}                                             occupation  {c |} occupa~r  {c |}
+      {c |} {res}      65  {txt}{c |} {res}       1  {txt}{c |} {res}     65  {txt}{c |} {res}       2  {txt}{c |} {res}      Manual labor on other people’s land, farm, house  {txt}{c |} {res}          {txt}{c |}
+      {c LT}{hline 10}{c TT}{c BT}{hline 9}{c TT}{hline 1}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 11}{c BT}{hline 3}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 9}{c BT}{c TT}{hline 10}{c RT}
+      {c |} casten~e {c |} castec~e {c |} litera~n {c |}       treatment {c |} own4wh~n {c |} own4wh.. {c |} own4wh~e {c |} own4wh~t {c |} own4wh.. {c |} theftf~n {c |}
+      {c |} {res}    MAAL {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}Treatment Group {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c TT}{hline 5}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 6}{c TT}{hline 3}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c RT}
+      {c |} theftf~m {c |} own2wh~n {c |} own2wh.. {c |} own2wh~e  {c |} own2wh~t  {c |} own2wh..  {c |} own2wh~1  {c |} own2wh~2  {c |} cycleo~n  {c |} cycleo~m  {c |}
+      {c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c RT}
+      {c |} cycleo~e {c |} cyclet~n {c |} cyclet~m {c |} cyclet~1  {c |} cyclet~2  {c |} burgla~n  {c |} burgla~m  {c |} attemp~n  {c |} attemp~m  {c |} vandal~n  {c |}
+      {c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c +}{hline 11}{c +}{hline 11}{c RT}
+      {c |} vandal~m {c |} trespa~n {c |} trespa~m  {c |} robber~n  {c |} robber~m  {c |} robber~1  {c |} robber~2  {c |} theftyn  {c |} theftnum  {c |} theftv~1  {c |}
+      {c |} {res}       . {txt}{c |} {res}    -997 {txt}{c |} {res}       .  {txt}{c |} {res}       2  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}     No  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |}
+      {c LT}{hline 10}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 11}{c BT}{hline 3}{c TT}{hline 7}{c BT}{hline 10}{c TT}{c BT}{hline 11}{c BT}{hline 5}{c TT}{hline 5}{c BT}{hline 10}{c BT}{hline 4}{c TT}{hline 6}{c BT}{hline 11}{c RT}
+      {c |}     theftv~2     {c |}     thana~yn     {c |}     thana~on     {c |}     thanav~r     {c |}          _merge     {c |}     nonmco~s     {c |}
+      {c |}     {res}       .     {txt}{c |}     {res}      No     {txt}{c |}     {res}             {txt}{c |}     {res}             {txt}{c |}     {res}matched (3)     {txt}{c |}     {res}       1     {txt}{c |}
+      {c BLC}{hline 18}{c BT}{hline 18}{c BT}{hline 18}{c BT}{hline 18}{c BT}{hline 21}{c BT}{hline 18}{c BRC}
+
+      {c TLC}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 6}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 19}{c TT}{hline 10}{c TT}{hline 11}{c TT}{hline 11}{c TRC}
+ 606. {c |} uniqueid {c |} survey~2 {c |} thanav~2 {c |} exit {c |} base_age {c |} base_i~e {c |}         base_educ {c |}    hhid  {c |} surveyid  {c |} surveyor  {c |}
+      {c |} {res}     642 {txt}{c |} {res}112.4833 {txt}{c |} {res}       . {txt}{c |} {res}   1 {txt}{c |} {res}    1977 {txt}{c |} {res}    3822 {txt}{c |} {res}None or anganwadi {txt}{c |} {res}1807077  {txt}{c |} {res}     981  {txt}{c |} {res}     Sam  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 4}{c TT}{hline 5}{c BT}{hline 5}{c TT}{hline 9}{c TT}{hline 3}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 11}{c BT}{hline 1}{c TT}{hline 9}{c RT}
+      {c |} surv~ate {c |} surve~me {c |} surv~ete {c |} superp~t {c |} scruti~n  {c |} backch~n  {c |}    sex  {c |}  age  {c |}              educ  {c |} income  {c |}
+      {c |} {res}08222014 {txt}{c |} {res}    6749 {txt}{c |} {res}     Yes {txt}{c |} {res}      No {txt}{c |} {res}     Yes  {txt}{c |} {res}      No  {txt}{c |} {res}  Male  {txt}{c |} {res}1977  {txt}{c |} {res}None or anganwadi  {txt}{c |} {res}  2333  {txt}{c |}
+      {c LT}{hline 10}{c BT}{c TT}{hline 9}{c BT}{hline 1}{c TT}{hline 8}{c BT}{hline 1}{c TT}{hline 8}{c BT}{hline 2}{c TT}{hline 8}{c BT}{hline 11}{c BT}{hline 9}{c BT}{hline 7}{c BT}{hline 18}{c TT}{hline 1}{c BT}{hline 9}{c RT}
+      {c |} addres~r  {c |} addres~t  {c |} areadur  {c |} areadu~t  {c |}                                             occupation  {c |} occupa~r  {c |}
+      {c |} {res}      65  {txt}{c |} {res}       1  {txt}{c |} {res}     65  {txt}{c |} {res}       2  {txt}{c |} {res}      Manual labor on other people’s land, farm, house  {txt}{c |} {res}          {txt}{c |}
+      {c LT}{hline 10}{c TT}{c BT}{hline 9}{c TT}{hline 1}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 11}{c BT}{hline 3}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 9}{c BT}{c TT}{hline 10}{c RT}
+      {c |} casten~e {c |} castec~e {c |} litera~n {c |}       treatment {c |} own4wh~n {c |} own4wh.. {c |} own4wh~e {c |} own4wh~t {c |} own4wh.. {c |} theftf~n {c |}
+      {c |} {res}    MAAL {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}Treatment Group {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c TT}{hline 5}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 6}{c TT}{hline 3}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c RT}
+      {c |} theftf~m {c |} own2wh~n {c |} own2wh.. {c |} own2wh~e  {c |} own2wh~t  {c |} own2wh..  {c |} own2wh~1  {c |} own2wh~2  {c |} cycleo~n  {c |} cycleo~m  {c |}
+      {c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c RT}
+      {c |} cycleo~e {c |} cyclet~n {c |} cyclet~m {c |} cyclet~1  {c |} cyclet~2  {c |} burgla~n  {c |} burgla~m  {c |} attemp~n  {c |} attemp~m  {c |} vandal~n  {c |}
+      {c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c +}{hline 11}{c +}{hline 11}{c RT}
+      {c |} vandal~m {c |} trespa~n {c |} trespa~m  {c |} robber~n  {c |} robber~m  {c |} robber~1  {c |} robber~2  {c |} theftyn  {c |} theftnum  {c |} theftv~1  {c |}
+      {c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       .  {txt}{c |} {res}       2  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}     No  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |}
+      {c LT}{hline 10}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 11}{c BT}{hline 3}{c TT}{hline 7}{c BT}{hline 10}{c TT}{c BT}{hline 11}{c BT}{hline 5}{c TT}{hline 5}{c BT}{hline 10}{c BT}{hline 4}{c TT}{hline 6}{c BT}{hline 11}{c RT}
+      {c |}     theftv~2     {c |}     thana~yn     {c |}     thana~on     {c |}     thanav~r     {c |}          _merge     {c |}     nonmco~s     {c |}
+      {c |}     {res}       .     {txt}{c |}     {res}      No     {txt}{c |}     {res}             {txt}{c |}     {res}             {txt}{c |}     {res}matched (3)     {txt}{c |}     {res}       1     {txt}{c |}
+      {c BLC}{hline 18}{c BT}{hline 18}{c BT}{hline 18}{c BT}{hline 18}{c BT}{hline 21}{c BT}{hline 18}{c BRC}
+
+      {c TLC}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 6}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 19}{c TT}{hline 10}{c TT}{hline 11}{c TT}{hline 11}{c TRC}
+ 643. {c |} uniqueid {c |} survey~2 {c |} thanav~2 {c |} exit {c |} base_age {c |} base_i~e {c |}         base_educ {c |}    hhid  {c |} surveyid  {c |} surveyor  {c |}
+      {c |} {res}     679 {txt}{c |} {res}98.11667 {txt}{c |} {res}       . {txt}{c |} {res}   1 {txt}{c |} {res}      42 {txt}{c |} {res}    3166 {txt}{c |} {res}                8 {txt}{c |} {res}1813023  {txt}{c |} {res}     555  {txt}{c |} {res}   David  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 4}{c TT}{hline 5}{c BT}{hline 5}{c TT}{hline 9}{c TT}{hline 3}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 11}{c BT}{hline 1}{c TT}{hline 9}{c RT}
+      {c |} surv~ate {c |} surve~me {c |} surv~ete {c |} superp~t {c |} scruti~n  {c |} backch~n  {c |}    sex  {c |}  age  {c |}              educ  {c |} income  {c |}
+      {c |} {res}10142013 {txt}{c |} {res}    5887 {txt}{c |} {res}     Yes {txt}{c |} {res}      No {txt}{c |} {res}     Yes  {txt}{c |} {res}     Yes  {txt}{c |} {res}  Male  {txt}{c |} {res}  43  {txt}{c |} {res}                8  {txt}{c |} {res}  3148  {txt}{c |}
+      {c LT}{hline 10}{c BT}{c TT}{hline 9}{c BT}{hline 1}{c TT}{hline 8}{c BT}{hline 1}{c TT}{hline 8}{c BT}{hline 2}{c TT}{hline 8}{c BT}{hline 11}{c BT}{hline 9}{c BT}{hline 7}{c BT}{hline 18}{c TT}{hline 1}{c BT}{hline 9}{c RT}
+      {c |} addres~r  {c |} addres~t  {c |} areadur  {c |} areadu~t  {c |}                                             occupation  {c |} occupa~r  {c |}
+      {c |} {res}      42  {txt}{c |} {res}       2  {txt}{c |} {res}     10  {txt}{c |} {res}       3  {txt}{c |} {res}                                               Pension  {txt}{c |} {res}          {txt}{c |}
+      {c LT}{hline 10}{c TT}{c BT}{hline 9}{c TT}{hline 1}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 11}{c BT}{hline 3}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 9}{c BT}{c TT}{hline 10}{c RT}
+      {c |} casten~e {c |} castec~e {c |} litera~n {c |}       treatment {c |} own4wh~n {c |} own4wh.. {c |} own4wh~e {c |} own4wh~t {c |} own4wh.. {c |} theftf~n {c |}
+      {c |} {res}    SONI {txt}{c |} {res}       . {txt}{c |} {res}     Yes {txt}{c |} {res}Treatment Group {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c TT}{hline 5}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 6}{c TT}{hline 3}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c RT}
+      {c |} theftf~m {c |} own2wh~n {c |} own2wh.. {c |} own2wh~e  {c |} own2wh~t  {c |} own2wh..  {c |} own2wh~1  {c |} own2wh~2  {c |} cycleo~n  {c |} cycleo~m  {c |}
+      {c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c RT}
+      {c |} cycleo~e {c |} cyclet~n {c |} cyclet~m {c |} cyclet~1  {c |} cyclet~2  {c |} burgla~n  {c |} burgla~m  {c |} attemp~n  {c |} attemp~m  {c |} vandal~n  {c |}
+      {c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c +}{hline 11}{c +}{hline 11}{c RT}
+      {c |} vandal~m {c |} trespa~n {c |} trespa~m  {c |} robber~n  {c |} robber~m  {c |} robber~1  {c |} robber~2  {c |} theftyn  {c |} theftnum  {c |} theftv~1  {c |}
+      {c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       .  {txt}{c |} {res}       2  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}     No  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |}
+      {c LT}{hline 10}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 11}{c BT}{hline 3}{c TT}{hline 7}{c BT}{hline 10}{c TT}{c BT}{hline 11}{c BT}{hline 5}{c TT}{hline 5}{c BT}{hline 10}{c BT}{hline 4}{c TT}{hline 6}{c BT}{hline 11}{c RT}
+      {c |}     theftv~2     {c |}     thana~yn     {c |}     thana~on     {c |}     thanav~r     {c |}          _merge     {c |}     nonmco~s     {c |}
+      {c |}     {res}       .     {txt}{c |}     {res}      No     {txt}{c |}     {res}             {txt}{c |}     {res}             {txt}{c |}     {res}matched (3)     {txt}{c |}     {res}       1     {txt}{c |}
+      {c BLC}{hline 18}{c BT}{hline 18}{c BT}{hline 18}{c BT}{hline 18}{c BT}{hline 21}{c BT}{hline 18}{c BRC}
+
+      {c TLC}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 6}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 19}{c TT}{hline 10}{c TT}{hline 11}{c TT}{hline 11}{c TRC}
+ 644. {c |} uniqueid {c |} survey~2 {c |} thanav~2 {c |} exit {c |} base_age {c |} base_i~e {c |}         base_educ {c |}    hhid  {c |} surveyid  {c |} surveyor  {c |}
+      {c |} {res}     680 {txt}{c |} {res}109.7333 {txt}{c |} {res}       . {txt}{c |} {res}   1 {txt}{c |} {res}      37 {txt}{c |} {res}    2547 {txt}{c |} {res}None or anganwadi {txt}{c |} {res}1813023  {txt}{c |} {res}     669  {txt}{c |} {res}    Mary  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 4}{c TT}{hline 5}{c BT}{hline 5}{c TT}{hline 9}{c TT}{hline 3}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 11}{c BT}{hline 1}{c TT}{hline 9}{c RT}
+      {c |} surv~ate {c |} surve~me {c |} surv~ete {c |} superp~t {c |} scruti~n  {c |} backch~n  {c |}    sex  {c |}  age  {c |}              educ  {c |} income  {c |}
+      {c |} {res}10292013 {txt}{c |} {res}    6584 {txt}{c |} {res}     Yes {txt}{c |} {res}      No {txt}{c |} {res}     Yes  {txt}{c |} {res}      No  {txt}{c |} {res}Female  {txt}{c |} {res}  38  {txt}{c |} {res}None or anganwadi  {txt}{c |} {res}  1692  {txt}{c |}
+      {c LT}{hline 10}{c BT}{c TT}{hline 9}{c BT}{hline 1}{c TT}{hline 8}{c BT}{hline 1}{c TT}{hline 8}{c BT}{hline 2}{c TT}{hline 8}{c BT}{hline 11}{c BT}{hline 9}{c BT}{hline 7}{c BT}{hline 18}{c TT}{hline 1}{c BT}{hline 9}{c RT}
+      {c |} addres~r  {c |} addres~t  {c |} areadur  {c |} areadu~t  {c |}                                             occupation  {c |} occupa~r  {c |}
+      {c |} {res}      55  {txt}{c |} {res}       1  {txt}{c |} {res}      7  {txt}{c |} {res}       2  {txt}{c |} {res}                                  Farming or livestock  {txt}{c |} {res}          {txt}{c |}
+      {c LT}{hline 10}{c TT}{c BT}{hline 9}{c TT}{hline 1}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 11}{c BT}{hline 3}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 9}{c BT}{c TT}{hline 10}{c RT}
+      {c |} casten~e {c |} castec~e {c |} litera~n {c |}       treatment {c |} own4wh~n {c |} own4wh.. {c |} own4wh~e {c |} own4wh~t {c |} own4wh.. {c |} theftf~n {c |}
+      {c |} {res} RAJPOOT {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}  Control Group {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c TT}{hline 5}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 6}{c TT}{hline 3}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c RT}
+      {c |} theftf~m {c |} own2wh~n {c |} own2wh.. {c |} own2wh~e  {c |} own2wh~t  {c |} own2wh..  {c |} own2wh~1  {c |} own2wh~2  {c |} cycleo~n  {c |} cycleo~m  {c |}
+      {c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}     Yes  {txt}{c |} {res}       1  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c RT}
+      {c |} cycleo~e {c |} cyclet~n {c |} cyclet~m {c |} cyclet~1  {c |} cyclet~2  {c |} burgla~n  {c |} burgla~m  {c |} attemp~n  {c |} attemp~m  {c |} vandal~n  {c |}
+      {c |} {res}    3072 {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c +}{hline 11}{c +}{hline 11}{c RT}
+      {c |} vandal~m {c |} trespa~n {c |} trespa~m  {c |} robber~n  {c |} robber~m  {c |} robber~1  {c |} robber~2  {c |} theftyn  {c |} theftnum  {c |} theftv~1  {c |}
+      {c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       .  {txt}{c |} {res}       2  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}     No  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |}
+      {c LT}{hline 10}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 11}{c BT}{hline 3}{c TT}{hline 7}{c BT}{hline 10}{c TT}{c BT}{hline 11}{c BT}{hline 5}{c TT}{hline 5}{c BT}{hline 10}{c BT}{hline 4}{c TT}{hline 6}{c BT}{hline 11}{c RT}
+      {c |}     theftv~2     {c |}     thana~yn     {c |}     thana~on     {c |}     thanav~r     {c |}          _merge     {c |}     nonmco~s     {c |}
+      {c |}     {res}       .     {txt}{c |}     {res}      No     {txt}{c |}     {res}             {txt}{c |}     {res}             {txt}{c |}     {res}matched (3)     {txt}{c |}     {res}       1     {txt}{c |}
+      {c BLC}{hline 18}{c BT}{hline 18}{c BT}{hline 18}{c BT}{hline 18}{c BT}{hline 21}{c BT}{hline 18}{c BRC}
+
+      {c TLC}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 6}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 19}{c TT}{hline 10}{c TT}{hline 11}{c TT}{hline 11}{c TRC}
+1000. {c |} uniqueid {c |} survey~2 {c |} thanav~2 {c |} exit {c |} base_age {c |} base_i~e {c |}         base_educ {c |}    hhid  {c |} surveyid  {c |} surveyor  {c |}
+      {c |} {res}    1000 {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}   . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}                  {txt}{c |} {res}2025087  {txt}{c |} {res}     972  {txt}{c |} {res}    Mary  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 4}{c TT}{hline 5}{c BT}{hline 5}{c TT}{hline 9}{c TT}{hline 3}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 11}{c BT}{hline 1}{c TT}{hline 9}{c RT}
+      {c |} surv~ate {c |} surve~me {c |} surv~ete {c |} superp~t {c |} scruti~n  {c |} backch~n  {c |}    sex  {c |}  age  {c |}              educ  {c |} income  {c |}
+      {c |} {res}08232013 {txt}{c |} {res}    6432 {txt}{c |} {res}     Yes {txt}{c |} {res}      No {txt}{c |} {res}     Yes  {txt}{c |} {res}     Yes  {txt}{c |} {res}Female  {txt}{c |} {res}  40  {txt}{c |} {res}None or anganwadi  {txt}{c |} {res}  3138  {txt}{c |}
+      {c LT}{hline 10}{c BT}{c TT}{hline 9}{c BT}{hline 1}{c TT}{hline 8}{c BT}{hline 1}{c TT}{hline 8}{c BT}{hline 2}{c TT}{hline 8}{c BT}{hline 11}{c BT}{hline 9}{c BT}{hline 7}{c BT}{hline 18}{c TT}{hline 1}{c BT}{hline 9}{c RT}
+      {c |} addres~r  {c |} addres~t  {c |} areadur  {c |} areadu~t  {c |}                                             occupation  {c |} occupa~r  {c |}
+      {c |} {res}      40  {txt}{c |} {res}       1  {txt}{c |} {res}     40  {txt}{c |} {res}       2  {txt}{c |} {res}                                  Farming or livestock  {txt}{c |} {res}          {txt}{c |}
+      {c LT}{hline 10}{c TT}{c BT}{hline 9}{c TT}{hline 1}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 11}{c BT}{hline 3}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 9}{c BT}{c TT}{hline 10}{c RT}
+      {c |} casten~e {c |} castec~e {c |} litera~n {c |}       treatment {c |} own4wh~n {c |} own4wh.. {c |} own4wh~e {c |} own4wh~t {c |} own4wh.. {c |} theftf~n {c |}
+      {c |} {res}   MEENA {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}Treatment Group {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c TT}{hline 5}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 6}{c TT}{hline 3}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c RT}
+      {c |} theftf~m {c |} own2wh~n {c |} own2wh.. {c |} own2wh~e  {c |} own2wh~t  {c |} own2wh..  {c |} own2wh~1  {c |} own2wh~2  {c |} cycleo~n  {c |} cycleo~m  {c |}
+      {c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c RT}
+      {c |} cycleo~e {c |} cyclet~n {c |} cyclet~m {c |} cyclet~1  {c |} cyclet~2  {c |} burgla~n  {c |} burgla~m  {c |} attemp~n  {c |} attemp~m  {c |} vandal~n  {c |}
+      {c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c +}{hline 11}{c +}{hline 11}{c RT}
+      {c |} vandal~m {c |} trespa~n {c |} trespa~m  {c |} robber~n  {c |} robber~m  {c |} robber~1  {c |} robber~2  {c |} theftyn  {c |} theftnum  {c |} theftv~1  {c |}
+      {c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       .  {txt}{c |} {res}       2  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}     No  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |}
+      {c LT}{hline 10}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 11}{c BT}{hline 3}{c TT}{hline 7}{c BT}{hline 10}{c TT}{c BT}{hline 11}{c BT}{hline 5}{c TT}{hline 5}{c BT}{hline 10}{c BT}{hline 4}{c TT}{hline 6}{c BT}{hline 11}{c RT}
+      {c |}     theftv~2     {c |}     thana~yn     {c |}     thana~on     {c |}     thanav~r     {c |}          _merge     {c |}     nonmco~s     {c |}
+      {c |}     {res}       .     {txt}{c |}     {res}      No     {txt}{c |}     {res}             {txt}{c |}     {res}             {txt}{c |}     {res}          .     {txt}{c |}     {res}       1     {txt}{c |}
+      {c BLC}{hline 18}{c BT}{hline 18}{c BT}{hline 18}{c BT}{hline 18}{c BT}{hline 21}{c BT}{hline 18}{c BRC}
+
+      {c TLC}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 6}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 19}{c TT}{hline 10}{c TT}{hline 11}{c TT}{hline 11}{c TRC}
+1001. {c |} uniqueid {c |} survey~2 {c |} thanav~2 {c |} exit {c |} base_age {c |} base_i~e {c |}         base_educ {c |}    hhid  {c |} surveyid  {c |} surveyor  {c |}
+      {c |} {res}    1001 {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}   . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}                  {txt}{c |} {res}2025097  {txt}{c |} {res}     969  {txt}{c |} {res}    Mary  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 4}{c TT}{hline 5}{c BT}{hline 5}{c TT}{hline 9}{c TT}{hline 3}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 11}{c BT}{hline 1}{c TT}{hline 9}{c RT}
+      {c |} surv~ate {c |} surve~me {c |} surv~ete {c |} superp~t {c |} scruti~n  {c |} backch~n  {c |}    sex  {c |}  age  {c |}              educ  {c |} income  {c |}
+      {c |} {res}11162014 {txt}{c |} {res}    8474 {txt}{c |} {res}     Yes {txt}{c |} {res}      No {txt}{c |} {res}     Yes  {txt}{c |} {res}      No  {txt}{c |} {res}  Male  {txt}{c |} {res}  30  {txt}{c |} {res}                2  {txt}{c |} {res}   219  {txt}{c |}
+      {c LT}{hline 10}{c BT}{c TT}{hline 9}{c BT}{hline 1}{c TT}{hline 8}{c BT}{hline 1}{c TT}{hline 8}{c BT}{hline 2}{c TT}{hline 8}{c BT}{hline 11}{c BT}{hline 9}{c BT}{hline 7}{c BT}{hline 18}{c TT}{hline 1}{c BT}{hline 9}{c RT}
+      {c |} addres~r  {c |} addres~t  {c |} areadur  {c |} areadu~t  {c |}                                             occupation  {c |} occupa~r  {c |}
+      {c |} {res}      39  {txt}{c |} {res}       1  {txt}{c |} {res}     30  {txt}{c |} {res}       2  {txt}{c |} {res}Employed for not farm related wage work. (not teacher)  {txt}{c |} {res}          {txt}{c |}
+      {c LT}{hline 10}{c TT}{c BT}{hline 9}{c TT}{hline 1}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 11}{c BT}{hline 3}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 9}{c BT}{c TT}{hline 10}{c RT}
+      {c |} casten~e {c |} castec~e {c |} litera~n {c |}       treatment {c |} own4wh~n {c |} own4wh.. {c |} own4wh~e {c |} own4wh~t {c |} own4wh.. {c |} theftf~n {c |}
+      {c |} {res}   MEENA {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}  Control Group {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c TT}{hline 5}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 6}{c TT}{hline 3}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c RT}
+      {c |} theftf~m {c |} own2wh~n {c |} own2wh.. {c |} own2wh~e  {c |} own2wh~t  {c |} own2wh..  {c |} own2wh~1  {c |} own2wh~2  {c |} cycleo~n  {c |} cycleo~m  {c |}
+      {c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c RT}
+      {c |} cycleo~e {c |} cyclet~n {c |} cyclet~m {c |} cyclet~1  {c |} cyclet~2  {c |} burgla~n  {c |} burgla~m  {c |} attemp~n  {c |} attemp~m  {c |} vandal~n  {c |}
+      {c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c +}{hline 11}{c +}{hline 11}{c RT}
+      {c |} vandal~m {c |} trespa~n {c |} trespa~m  {c |} robber~n  {c |} robber~m  {c |} robber~1  {c |} robber~2  {c |} theftyn  {c |} theftnum  {c |} theftv~1  {c |}
+      {c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       .  {txt}{c |} {res}       2  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}     No  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |}
+      {c LT}{hline 10}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 11}{c BT}{hline 3}{c TT}{hline 7}{c BT}{hline 10}{c TT}{c BT}{hline 11}{c BT}{hline 5}{c TT}{hline 5}{c BT}{hline 10}{c BT}{hline 4}{c TT}{hline 6}{c BT}{hline 11}{c RT}
+      {c |}     theftv~2     {c |}     thana~yn     {c |}     thana~on     {c |}     thanav~r     {c |}          _merge     {c |}     nonmco~s     {c |}
+      {c |}     {res}       .     {txt}{c |}     {res}      No     {txt}{c |}     {res}             {txt}{c |}     {res}             {txt}{c |}     {res}          .     {txt}{c |}     {res}       1     {txt}{c |}
+      {c BLC}{hline 18}{c BT}{hline 18}{c BT}{hline 18}{c BT}{hline 18}{c BT}{hline 21}{c BT}{hline 18}{c BRC}
+
+      {c TLC}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 6}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 19}{c TT}{hline 10}{c TT}{hline 11}{c TT}{hline 11}{c TRC}
+1002. {c |} uniqueid {c |} survey~2 {c |} thanav~2 {c |} exit {c |} base_age {c |} base_i~e {c |}         base_educ {c |}    hhid  {c |} surveyid  {c |} surveyor  {c |}
+      {c |} {res}    1000 {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}   . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}                  {txt}{c |} {res}2025087  {txt}{c |} {res}     972  {txt}{c |} {res}    Mary  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 4}{c TT}{hline 5}{c BT}{hline 5}{c TT}{hline 9}{c TT}{hline 3}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 11}{c BT}{hline 1}{c TT}{hline 9}{c RT}
+      {c |} surv~ate {c |} surve~me {c |} surv~ete {c |} superp~t {c |} scruti~n  {c |} backch~n  {c |}    sex  {c |}  age  {c |}              educ  {c |} income  {c |}
+      {c |} {res}08232013 {txt}{c |} {res}    6432 {txt}{c |} {res}     Yes {txt}{c |} {res}      No {txt}{c |} {res}     Yes  {txt}{c |} {res}     Yes  {txt}{c |} {res}Female  {txt}{c |} {res}  40  {txt}{c |} {res}None or anganwadi  {txt}{c |} {res}  3138  {txt}{c |}
+      {c LT}{hline 10}{c BT}{c TT}{hline 9}{c BT}{hline 1}{c TT}{hline 8}{c BT}{hline 1}{c TT}{hline 8}{c BT}{hline 2}{c TT}{hline 8}{c BT}{hline 11}{c BT}{hline 9}{c BT}{hline 7}{c BT}{hline 18}{c TT}{hline 1}{c BT}{hline 9}{c RT}
+      {c |} addres~r  {c |} addres~t  {c |} areadur  {c |} areadu~t  {c |}                                             occupation  {c |} occupa~r  {c |}
+      {c |} {res}      40  {txt}{c |} {res}       1  {txt}{c |} {res}     40  {txt}{c |} {res}       2  {txt}{c |} {res}                                  Farming or livestock  {txt}{c |} {res}          {txt}{c |}
+      {c LT}{hline 10}{c TT}{c BT}{hline 9}{c TT}{hline 1}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 11}{c BT}{hline 3}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 9}{c BT}{c TT}{hline 10}{c RT}
+      {c |} casten~e {c |} castec~e {c |} litera~n {c |}       treatment {c |} own4wh~n {c |} own4wh.. {c |} own4wh~e {c |} own4wh~t {c |} own4wh.. {c |} theftf~n {c |}
+      {c |} {res}   MEENA {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}Treatment Group {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c TT}{hline 5}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 6}{c TT}{hline 3}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c RT}
+      {c |} theftf~m {c |} own2wh~n {c |} own2wh.. {c |} own2wh~e  {c |} own2wh~t  {c |} own2wh..  {c |} own2wh~1  {c |} own2wh~2  {c |} cycleo~n  {c |} cycleo~m  {c |}
+      {c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c RT}
+      {c |} cycleo~e {c |} cyclet~n {c |} cyclet~m {c |} cyclet~1  {c |} cyclet~2  {c |} burgla~n  {c |} burgla~m  {c |} attemp~n  {c |} attemp~m  {c |} vandal~n  {c |}
+      {c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c +}{hline 11}{c +}{hline 11}{c RT}
+      {c |} vandal~m {c |} trespa~n {c |} trespa~m  {c |} robber~n  {c |} robber~m  {c |} robber~1  {c |} robber~2  {c |} theftyn  {c |} theftnum  {c |} theftv~1  {c |}
+      {c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       .  {txt}{c |} {res}       2  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}     No  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |}
+      {c LT}{hline 10}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 11}{c BT}{hline 3}{c TT}{hline 7}{c BT}{hline 10}{c TT}{c BT}{hline 11}{c BT}{hline 5}{c TT}{hline 5}{c BT}{hline 10}{c BT}{hline 4}{c TT}{hline 6}{c BT}{hline 11}{c RT}
+      {c |}     theftv~2     {c |}     thana~yn     {c |}     thana~on     {c |}     thanav~r     {c |}          _merge     {c |}     nonmco~s     {c |}
+      {c |}     {res}       .     {txt}{c |}     {res}      No     {txt}{c |}     {res}             {txt}{c |}     {res}             {txt}{c |}     {res}          .     {txt}{c |}     {res}       1     {txt}{c |}
+      {c BLC}{hline 18}{c BT}{hline 18}{c BT}{hline 18}{c BT}{hline 18}{c BT}{hline 21}{c BT}{hline 18}{c BRC}
+
+      {c TLC}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 6}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 19}{c TT}{hline 10}{c TT}{hline 11}{c TT}{hline 11}{c TRC}
+1003. {c |} uniqueid {c |} survey~2 {c |} thanav~2 {c |} exit {c |} base_age {c |} base_i~e {c |}         base_educ {c |}    hhid  {c |} surveyid  {c |} surveyor  {c |}
+      {c |} {res}    1001 {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}   . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}                  {txt}{c |} {res}2025097  {txt}{c |} {res}     969  {txt}{c |} {res}    Mary  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 6}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 4}{c TT}{hline 5}{c BT}{hline 5}{c TT}{hline 9}{c TT}{hline 3}{c BT}{hline 3}{c TT}{hline 6}{c BT}{hline 11}{c BT}{hline 1}{c TT}{hline 9}{c RT}
+      {c |} surv~ate {c |} surve~me {c |} surv~ete {c |} superp~t {c |} scruti~n  {c |} backch~n  {c |}    sex  {c |}  age  {c |}              educ  {c |} income  {c |}
+      {c |} {res}11162014 {txt}{c |} {res}    8474 {txt}{c |} {res}     Yes {txt}{c |} {res}      No {txt}{c |} {res}     Yes  {txt}{c |} {res}      No  {txt}{c |} {res}  Male  {txt}{c |} {res}  30  {txt}{c |} {res}                2  {txt}{c |} {res}   219  {txt}{c |}
+      {c LT}{hline 10}{c BT}{c TT}{hline 9}{c BT}{hline 1}{c TT}{hline 8}{c BT}{hline 1}{c TT}{hline 8}{c BT}{hline 2}{c TT}{hline 8}{c BT}{hline 11}{c BT}{hline 9}{c BT}{hline 7}{c BT}{hline 18}{c TT}{hline 1}{c BT}{hline 9}{c RT}
+      {c |} addres~r  {c |} addres~t  {c |} areadur  {c |} areadu~t  {c |}                                             occupation  {c |} occupa~r  {c |}
+      {c |} {res}      39  {txt}{c |} {res}       1  {txt}{c |} {res}     30  {txt}{c |} {res}       2  {txt}{c |} {res}Employed for not farm related wage work. (not teacher)  {txt}{c |} {res}          {txt}{c |}
+      {c LT}{hline 10}{c TT}{c BT}{hline 9}{c TT}{hline 1}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 11}{c BT}{hline 3}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 10}{c TT}{hline 9}{c BT}{c TT}{hline 10}{c RT}
+      {c |} casten~e {c |} castec~e {c |} litera~n {c |}       treatment {c |} own4wh~n {c |} own4wh.. {c |} own4wh~e {c |} own4wh~t {c |} own4wh.. {c |} theftf~n {c |}
+      {c |} {res}   MEENA {txt}{c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}  Control Group {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c TT}{hline 5}{c BT}{hline 5}{c TT}{hline 4}{c BT}{hline 6}{c TT}{hline 3}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 8}{c TT}{hline 1}{c BT}{hline 9}{c TT}{c BT}{hline 10}{c RT}
+      {c |} theftf~m {c |} own2wh~n {c |} own2wh.. {c |} own2wh~e  {c |} own2wh~t  {c |} own2wh..  {c |} own2wh~1  {c |} own2wh~2  {c |} cycleo~n  {c |} cycleo~m  {c |}
+      {c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c +}{hline 11}{c RT}
+      {c |} cycleo~e {c |} cyclet~n {c |} cyclet~m {c |} cyclet~1  {c |} cyclet~2  {c |} burgla~n  {c |} burgla~m  {c |} attemp~n  {c |} attemp~m  {c |} vandal~n  {c |}
+      {c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       . {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |} {res}       .  {txt}{c |} {res}      No  {txt}{c |}
+      {c LT}{hline 10}{c +}{hline 10}{c +}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c BT}{c TT}{hline 10}{c +}{hline 11}{c +}{hline 11}{c RT}
+      {c |} vandal~m {c |} trespa~n {c |} trespa~m  {c |} robber~n  {c |} robber~m  {c |} robber~1  {c |} robber~2  {c |} theftyn  {c |} theftnum  {c |} theftv~1  {c |}
+      {c |} {res}       . {txt}{c |} {res}      No {txt}{c |} {res}       .  {txt}{c |} {res}       2  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |} {res}     No  {txt}{c |} {res}       .  {txt}{c |} {res}       .  {txt}{c |}
+      {c LT}{hline 10}{c BT}{hline 7}{c TT}{hline 2}{c BT}{hline 11}{c BT}{hline 3}{c TT}{hline 7}{c BT}{hline 10}{c TT}{c BT}{hline 11}{c BT}{hline 5}{c TT}{hline 5}{c BT}{hline 10}{c BT}{hline 4}{c TT}{hline 6}{c BT}{hline 11}{c RT}
+      {c |}     theftv~2     {c |}     thana~yn     {c |}     thana~on     {c |}     thanav~r     {c |}          _merge     {c |}     nonmco~s     {c |}
+      {c |}     {res}       .     {txt}{c |}     {res}      No     {txt}{c |}     {res}             {txt}{c |}     {res}             {txt}{c |}     {res}          .     {txt}{c |}     {res}       1     {txt}{c |}
+      {c BLC}{hline 18}{c BT}{hline 18}{c BT}{hline 18}{c BT}{hline 18}{c BT}{hline 21}{c BT}{hline 18}{c BRC}
+
+{com}. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. 
+. duplicates drop
+
+{p 0 4}{txt}Duplicates in terms of {txt} all variables{p_end}
+
+(2 observations deleted)
+
+{com}. mvpattern income educ surveytime burglarynum , mvmarker(msymbol(circle_h)) mlabangle(horizontal) mlabposition(0)
+{err}command {bf}mvpattern{sf} is unrecognized
+{txt}{search r(199), local:r(199);}
+
+{com}. 
+. 
+. help mvpattern
+
+. ssc install mvpattern
+{txt}{err}ssc install: "mvpattern" not found at SSC, type {stata search mvpattern}
+(To find all packages at SSC that start with m, type {stata ssc describe m})
+{txt}{search r(601), local:r(601);}
+
+{com}. search mvpattern
+
+. mvpatterns
+{err}command {bf}mvpatterns{sf} is unrecognized
+{txt}{search r(199), local:r(199);}
+
+{com}. ssc install mvpatterns
+{txt}{err}ssc install: "mvpatterns" not found at SSC, type {stata search mvpatterns}
+(To find all packages at SSC that start with m, type {stata ssc describe m})
+{txt}{search r(601), local:r(601);}
+
+{com}. mvpatterns
+{err}command {bf}mvpatterns{sf} is unrecognized
+{txt}{search r(199), local:r(199);}
+
+{com}. search mvpatterns
+
+. ssc install ice, replace
+{txt}checking {hilite:ice} consistency and verifying not already installed...
+installing into c:\ado\plus\...
+installation complete.
+
+{com}. ssc install mim, replace
+{txt}checking {hilite:mim} consistency and verifying not already installed...
+installing into c:\ado\plus\...
+installation complete.
+
+{com}. misstable ummarize
+{err}{p 0 4 2}
+{bf:misstable ummarize} unrecognized{break}
+valid {bf:misstable} subcommands are
+{bf:summarize},
+{bf:patterns},
+{bf:tree}, and
+{bf:nested}
+{p_end}
+{txt}{search r(198), local:r(198);}
+
+{com}. misstable summarize
+{txt}{col 64}Obs<.
+{col 49}{c TLC}{hline 30}
+{col 16}{c |}{col 49}{c |} Unique
+{col 7}Variable {c |}{col 22}Obs=.{col 32}Obs>.{col 42}Obs<.{col 49}{c |} values{col 65}Min{col 77}Max
+  {hline 13}{c +}{hline 32}{c +}{hline 30}
+   surveytime2 {c |}{res}        52{txt}{space 10}{res}       949{txt}  {c |}   >500   62.61666    170.1333
+  thanavisit~2 {c |}{res}     1,001{txt}{space 10}{res}         0{txt}  {c |}      0          .           .
+          exit {c |}{res}        52{txt}{space 10}{res}       949{txt}  {c |}      1          1           1
+      base_age {c |}{res}        53{txt}{space 10}{res}       948{txt}  {c |}     84         17        1990
+   base_income {c |}{res}        52{txt}{space 10}{res}       949{txt}  {c |}   >500      -1283        6063
+  superpresent {c |}{res}         3{txt}{space 10}{res}       998{txt}  {c |}      2          0           1
+  backchecke~n {c |}{res}        26{txt}{space 10}{res}       975{txt}  {c |}      2          0           1
+           age {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}     84         18        1990
+          educ {c |}{res}        12{txt}{space 10}{res}       989{txt}  {c |}     16          0          15
+    addressdur {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}     84          1          99
+       areadur {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}     85          1          99
+     castecode {c |}{res}       865{txt}{space 10}{res}       136{txt}  {c |}      6          1           6
+    literateyn {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      2          0           1
+  own4whe~rnum {c |}{res}       909{txt}{space 10}{res}        92{txt}  {c |}      3          1           3
+  own4wheele~e {c |}{res}       911{txt}{space 10}{res}        90{txt}  {c |}     82        103        9812
+  own4wheele~t {c |}{res}       911{txt}{space 10}{res}        90{txt}  {c |}      2          0           1
+  own4whe~tnum {c |}{res}     1,000{txt}{space 10}{res}         1{txt}  {c |}      1          1           1
+  theftfromc~n {c |}{res}       911{txt}{space 10}{res}        90{txt}  {c |}      2          0           1
+  theftfromc~m {c |}{res}       998{txt}{space 10}{res}         3{txt}  {c |}      1          1           1
+  own2wheele~n {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      2          1           2
+  own2whe~rnum {c |}{res}       763{txt}{space 10}{res}       238{txt}  {c |}      4          1           4
+  own2wheele~e {c |}{res}       763{txt}{space 10}{res}       238{txt}  {c |}    213        137        3493
+  own2wheele~t {c |}{res}       761{txt}{space 10}{res}       240{txt}  {c |}      3          1          99
+  own2whe~tnum {c |}{res}       984{txt}{space 10}{res}        17{txt}  {c |}      1          1           1
+  own2wheele~1 {c |}{res}       984{txt}{space 10}{res}        17{txt}  {c |}      1          1           1
+  own2wheele~2 {c |}{res}     1,001{txt}{space 10}{res}         0{txt}  {c |}      0          .           .
+   cycleownnum {c |}{res}       601{txt}{space 10}{res}       400{txt}  {c |}      5          1           5
+  cycleownva~e {c |}{res}       601{txt}{space 10}{res}       400{txt}  {c |}    332        117        9046
+  cycletheftyn {c |}{res}       601{txt}{space 10}{res}       400{txt}  {c |}      3          1          99
+  cycletheft~m {c |}{res}       990{txt}{space 10}{res}        11{txt}  {c |}      2          1           4
+  cycletheft~1 {c |}{res}       990{txt}{space 10}{res}        11{txt}  {c |}      4          1           5
+  cycletheft~2 {c |}{res}     1,000{txt}{space 10}{res}         1{txt}  {c |}      1          2           2
+    burglaryyn {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      4       -999           2
+   burglarynum {c |}{res}       989{txt}{space 10}{res}        12{txt}  {c |}      2          1           3
+  attemptedb~n {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      2          1           2
+  attemptedb~m {c |}{res}       998{txt}{space 10}{res}         3{txt}  {c |}      2          1           3
+   vandalismyn {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      3       -999           2
+  vandalismnum {c |}{res}     1,000{txt}{space 10}{res}         1{txt}  {c |}      1          1           1
+  trespassin~n {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      3       -997           2
+  trespassin~m {c |}{res}       997{txt}{space 10}{res}         4{txt}  {c |}      1          1           1
+     robberyyn {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      2          1           2
+    robberynum {c |}{res}     1,000{txt}{space 10}{res}         1{txt}  {c |}      1          1           1
+  robberyvic~1 {c |}{res}     1,000{txt}{space 10}{res}         1{txt}  {c |}      1          1           1
+  robberyvic~2 {c |}{res}     1,001{txt}{space 10}{res}         0{txt}  {c |}      0          .           .
+       theftyn {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      2          1           2
+      theftnum {c |}{res}       986{txt}{space 10}{res}        15{txt}  {c |}      3          1           3
+  theftvicti~1 {c |}{res}       986{txt}{space 10}{res}        15{txt}  {c |}      5          1           8
+  theftvicti~2 {c |}{res}     1,001{txt}{space 10}{res}         0{txt}  {c |}      0          .           .
+  thanavisityn {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      4          1          99
+        _merge {c |}{res}         2{txt}{space 10}{res}       999{txt}  {c |}      2          2           3
+  {hline 13}{c BT}{hline 32}{c BT}{hline 30}
+
+{com}. misstable pattern
+{res}
+                        {txt}Missing-value patterns
+                          (1 means complete)
+
+{res}{txt}{space 2}            {c |}   Pattern
+{space 2}  Percent   {c |}  1  2  3  4    5  6  7  8    9 10 11 12   13 14 15 16
+{space 2}{hline 12}{c +}{hline 55}
+{space 2}     <1%    {c |}  1  1  1  1    1  1  1  1    1  1  1  1    1  1  1  1
+{space 2}{space 12}{c |}  1  1  1  1    1  1  1  1    1  1  1  1    1  1  1  1
+{space 2}{space 12}{c |}  1  1  1  1    1  1  1  1    1  1  1  1    1  1  1  1
+{space 2}{space 12}{c |}  1  1
+{space 2}{space 12}{c |}
+{space 2} {res:    38}     {c |}  1  1  1  1    1  1  1  1    1  1  1  1    1  1  1  1
+{space 2}{space 12}{c |}  1  1  1  1    0  0  0  0    0  0  0  0    0  0  0  0
+{space 2}{space 12}{c |}  0  0  0  0    0  0  0  0    0  0  0  0    0  0  0  0
+{space 2}{space 12}{c |}  0  0
+{space 2}{space 12}{c |}
+{space 2} {res:    17}     {c |}  1  1  1  1    1  1  1  1    1  1  1  1    1  1  1  1
+{space 2}{space 12}{c |}  1  1  1  1    1  1  1  0    0  0  0  0    0  0  0  0
+{space 2}{space 12}{c |}  0  0  0  0    0  0  0  0    0  0  0  0    0  0  0  0
+{space 2}{space 12}{c |}  0  0
+{space 2}{space 12}{c |}
+{err}{hline 2}Break{hline 2}
+{txt}{search r(1), local:r(1);}
+
+{com}. quietly misstable summarize, generate(miss_)
+
+. des mis_
+{err}variable {bf}mis_{sf} not found
+{txt}{search r(111), local:r(111);}
+
+{com}. des miss_
+{bf}{err}miss_{sf} ambiguous abbreviation
+{txt}{search r(111), local:r(111);}
+
+{com}. describe miss_
+{bf}{err}miss_{sf} ambiguous abbreviation
+{txt}{search r(111), local:r(111);}
+
+{com}. describe miss_*
+
+              {txt}storage   display    value
+variable name   type    format     label      variable label
+{hline}
+{p 0 48}{res}{bind:miss_surveyti~2}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(surveytime2>=.){p_end}
+{p 0 48}{bind:miss_thanavis~2}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(thanavisitreason_other2>=.){p_end}
+{p 0 48}{bind:miss_exit      }{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(exit>=.){p_end}
+{p 0 48}{bind:miss_base_age  }{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(base_age>=.){p_end}
+{p 0 48}{bind:miss_base_inc~e}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(base_income>=.){p_end}
+{p 0 48}{bind:miss_superpre~t}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(superpresent>=.){p_end}
+{p 0 48}{bind:miss_backchec~n}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(backcheckedyn>=.){p_end}
+{p 0 48}{bind:miss_age       }{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(age>=.){p_end}
+{p 0 48}{bind:miss_educ      }{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(educ>=.){p_end}
+{p 0 48}{bind:miss_addressdur}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(addressdur>=.){p_end}
+{p 0 48}{bind:miss_areadur   }{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(areadur>=.){p_end}
+{p 0 48}{bind:miss_castecode }{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(castecode>=.){p_end}
+{p 0 48}{bind:miss_literateyn}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(literateyn>=.){p_end}
+{p 0 48}{bind:miss_own4w~rnum}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(own4wheelernum>=.){p_end}
+{p 0 48}{bind:miss_own4whee~e}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(own4wheelervalue>=.){p_end}
+{p 0 48}{bind:miss_own4whee~t}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(own4wheelertheft>=.){p_end}
+{p 0 48}{bind:miss_own4w~tnum}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(own4wheelertheftnum>=.){p_end}
+{p 0 48}{bind:miss_theftfro~n}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(theftfromcaryn>=.){p_end}
+{p 0 48}{bind:miss_theftfro~m}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(theftfromcarnum>=.){p_end}
+{p 0 48}{bind:miss_own2whee~n}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(own2wheeleryn>=.){p_end}
+{p 0 48}{bind:miss_own2w~rnum}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(own2wheelernum>=.){p_end}
+{p 0 48}{bind:miss_own2whee~e}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(own2wheelervalue>=.){p_end}
+{p 0 48}{bind:miss_own2whee~t}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(own2wheelertheft>=.){p_end}
+{p 0 48}{bind:miss_own2w~tnum}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(own2wheelertheftnum>=.){p_end}
+{p 0 48}{bind:miss_own2whee~1}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(own2wheelertheftvictim_1>=.){p_end}
+{p 0 48}{bind:miss_own2whee~2}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(own2wheelertheftvictim_2>=.){p_end}
+{p 0 48}{bind:miss_cycleown~m}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(cycleownnum>=.){p_end}
+{p 0 48}{bind:miss_cycleown~e}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(cycleownvalue>=.){p_end}
+{p 0 48}{bind:miss_cyclethe~n}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(cycletheftyn>=.){p_end}
+{p 0 48}{bind:miss_cyclethe~m}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(cycletheftnum>=.){p_end}
+{p 0 48}{bind:miss_cyclethe~1}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(cycletheftvictim_1>=.){p_end}
+{p 0 48}{bind:miss_cyclethe~2}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(cycletheftvictim_2>=.){p_end}
+{p 0 48}{bind:miss_burglaryyn}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(burglaryyn>=.){p_end}
+{p 0 48}{bind:miss_burglary~m}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(burglarynum>=.){p_end}
+{p 0 48}{bind:miss_attempte~n}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(attemptedburglaryyn>=.){p_end}
+{p 0 48}{bind:miss_attempte~m}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(attemptedburglarynum>=.){p_end}
+{p 0 48}{bind:miss_vandalis~n}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(vandalismyn>=.){p_end}
+{p 0 48}{bind:miss_vandalis~m}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(vandalismnum>=.){p_end}
+{p 0 48}{bind:miss_trespass~n}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(trespassingyn>=.){p_end}
+{p 0 48}{bind:miss_trespass~m}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(trespassingnum>=.){p_end}
+{p 0 48}{bind:miss_robberyyn }{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(robberyyn>=.){p_end}
+{p 0 48}{bind:miss_robberynum}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(robberynum>=.){p_end}
+{p 0 48}{bind:miss_robberyv~1}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(robberyvictim_1>=.){p_end}
+{p 0 48}{bind:miss_robberyv~2}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(robberyvictim_2>=.){p_end}
+{p 0 48}{bind:miss_theftyn   }{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(theftyn>=.){p_end}
+{p 0 48}{bind:miss_theftnum  }{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(theftnum>=.){p_end}
+{p 0 48}{bind:miss_theftvic~1}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(theftvictim_1>=.){p_end}
+{p 0 48}{bind:miss_theftvic~2}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(theftvictim_2>=.){p_end}
+{p 0 48}{bind:miss_thanavis~n}{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(thanavisityn>=.){p_end}
+{p 0 48}{bind:miss__merge    }{txt}{bind: byte    }{bind:{txt}%8.0g     }{space 1}{bind:         }{bind:  }{res}{res}(_merge>=.){p_end}
+
+{com}. misstable tree, frequency
+{res}{txt}(only 7 variables shown)
+{txt}
+{space 2}Nested pattern of missing values
+{space 1} own2whee~2 robberyv~2 thanavis~2 theftvic~2 cyclethe~2 own4w~tnum robberynum
+{space 2}{hline 76}
+{space 2}{res:     1,001} {res:     1,001} {res:     1,001} {res:     1,001} {res:     1,000} {res:       999} {res:       998} 
+{space 68}{res:         1} 
+{space 57}{res:         1} {res:         1} 
+{space 68}{res:         0} 
+{space 46}{res:         1} {res:         1} {res:         1} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 24}{res:         0} {res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 13}{res:         0} {res:         0} {res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 24}{res:         0} {res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 2}{res:         0} {res:         0} {res:         0} {res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 24}{res:         0} {res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 13}{res:         0} {res:         0} {res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 24}{res:         0} {res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 2}{hline 76}
+{p 1 2 2}
+(number missing listed first)
+{p_end}
+
+{com}. missingplot, own2wheelertheftvictim_2 robberyvictim_2 theftvictim_1 own4wheelertheftnum cycletheftvictim_2 robberynum labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{err}option {bf:own2wheelertheftvictim_2} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot,  robberyvictim_2 theftvictim_1 own4wheelertheftnum cycletheftvictim_2 robberynum labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{err}option {bf:robberyvictim_2} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot, theftvictim_1 own4wheelertheftnum cycletheftvictim_2 robberynum labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{err}option {bf:theftvictim_1} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot, own4wheelervalue own2wheelervalue cycleownvalue robberyyn labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{err}option {bf:own4wheelervalue} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. ssc intall missingplot
+{txt}{err}ssc: intall: invalid subcommand
+{txt}{search r(198), local:r(198);}
+
+{com}. ssc install missingplot
+{txt}checking {hilite:missingplot} consistency and verifying not already installed...
+all files already exist and are up to date.
+
+{com}. ssc intall missingplot
+{txt}{err}ssc: intall: invalid subcommand
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot, own4wheelervalue own2wheelervalue cycleownvalue robberyyn labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{err}option {bf:own4wheelervalue} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot, own4wheelervalue own2wheelervalue cycleownvalue robberyyn labels mlabcolor(blue)
+{txt}note: only first 20 variables plotted
+{err}option {bf:own4wheelervalue} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot,cycletheftvictim_2 robberyvictim_2 labels mlabcolor(blue)
+{txt}note: only first 20 variables plotted
+{err}option {bf:cycletheftvictim_2} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. install mvpattern
+{err}command {bf}install{sf} is unrecognized
+{txt}{search r(199), local:r(199);}
+
+{com}. ssc install mvpattern
+{txt}{err}ssc install: "mvpattern" not found at SSC, type {stata search mvpattern}
+(To find all packages at SSC that start with m, type {stata ssc describe m})
+{txt}{search r(601), local:r(601);}
+
+{com}. search mvpattern
+
+. ssc install mvpattern
+{txt}{err}ssc install: "mvpattern" not found at SSC, type {stata search mvpattern}
+(To find all packages at SSC that start with m, type {stata ssc describe m})
+{txt}{search r(601), local:r(601);}
+
+{com}. use http://www.stata.com/stb/stb61/
+{err}no; data in memory would be lost
+{txt}{search r(4), local:r(4);}
+
+{com}. missingplot, own2wheelertheftvictim_2 cycletheftyn burglaryyn theftvictim_2 labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{err}option {bf:own2wheelertheftvictim_2} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. misstable tree, frequency
+{res}{txt}(only 7 variables shown)
+{txt}
+{space 2}Nested pattern of missing values
+{space 1} own2whee~2 robberyv~2 thanavis~2 theftvic~2 cyclethe~2 own4w~tnum robberynum
+{space 2}{hline 76}
+{space 2}{res:     1,001} {res:     1,001} {res:     1,001} {res:     1,001} {res:     1,000} {res:       999} {res:       998} 
+{space 68}{res:         1} 
+{space 57}{res:         1} {res:         1} 
+{space 68}{res:         0} 
+{space 46}{res:         1} {res:         1} {res:         1} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 24}{res:         0} {res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 13}{res:         0} {res:         0} {res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 24}{res:         0} {res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 2}{res:         0} {res:         0} {res:         0} {res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 24}{res:         0} {res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 13}{res:         0} {res:         0} {res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 24}{res:         0} {res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 2}{hline 76}
+{p 1 2 2}
+(number missing listed first)
+{p_end}
+
+{com}. misstable summarize
+{txt}{col 64}Obs<.
+{col 49}{c TLC}{hline 30}
+{col 16}{c |}{col 49}{c |} Unique
+{col 7}Variable {c |}{col 22}Obs=.{col 32}Obs>.{col 42}Obs<.{col 49}{c |} values{col 65}Min{col 77}Max
+  {hline 13}{c +}{hline 32}{c +}{hline 30}
+   surveytime2 {c |}{res}        52{txt}{space 10}{res}       949{txt}  {c |}   >500   62.61666    170.1333
+  thanavisit~2 {c |}{res}     1,001{txt}{space 10}{res}         0{txt}  {c |}      0          .           .
+          exit {c |}{res}        52{txt}{space 10}{res}       949{txt}  {c |}      1          1           1
+      base_age {c |}{res}        53{txt}{space 10}{res}       948{txt}  {c |}     84         17        1990
+   base_income {c |}{res}        52{txt}{space 10}{res}       949{txt}  {c |}   >500      -1283        6063
+  superpresent {c |}{res}         3{txt}{space 10}{res}       998{txt}  {c |}      2          0           1
+  backchecke~n {c |}{res}        26{txt}{space 10}{res}       975{txt}  {c |}      2          0           1
+           age {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}     84         18        1990
+          educ {c |}{res}        12{txt}{space 10}{res}       989{txt}  {c |}     16          0          15
+    addressdur {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}     84          1          99
+       areadur {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}     85          1          99
+     castecode {c |}{res}       865{txt}{space 10}{res}       136{txt}  {c |}      6          1           6
+    literateyn {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      2          0           1
+  own4whe~rnum {c |}{res}       909{txt}{space 10}{res}        92{txt}  {c |}      3          1           3
+  own4wheele~e {c |}{res}       911{txt}{space 10}{res}        90{txt}  {c |}     82        103        9812
+  own4wheele~t {c |}{res}       911{txt}{space 10}{res}        90{txt}  {c |}      2          0           1
+  own4whe~tnum {c |}{res}     1,000{txt}{space 10}{res}         1{txt}  {c |}      1          1           1
+  theftfromc~n {c |}{res}       911{txt}{space 10}{res}        90{txt}  {c |}      2          0           1
+  theftfromc~m {c |}{res}       998{txt}{space 10}{res}         3{txt}  {c |}      1          1           1
+  own2wheele~n {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      2          1           2
+  own2whe~rnum {c |}{res}       763{txt}{space 10}{res}       238{txt}  {c |}      4          1           4
+  own2wheele~e {c |}{res}       763{txt}{space 10}{res}       238{txt}  {c |}    213        137        3493
+  own2wheele~t {c |}{res}       761{txt}{space 10}{res}       240{txt}  {c |}      3          1          99
+  own2whe~tnum {c |}{res}       984{txt}{space 10}{res}        17{txt}  {c |}      1          1           1
+  own2wheele~1 {c |}{res}       984{txt}{space 10}{res}        17{txt}  {c |}      1          1           1
+  own2wheele~2 {c |}{res}     1,001{txt}{space 10}{res}         0{txt}  {c |}      0          .           .
+   cycleownnum {c |}{res}       601{txt}{space 10}{res}       400{txt}  {c |}      5          1           5
+  cycleownva~e {c |}{res}       601{txt}{space 10}{res}       400{txt}  {c |}    332        117        9046
+  cycletheftyn {c |}{res}       601{txt}{space 10}{res}       400{txt}  {c |}      3          1          99
+  cycletheft~m {c |}{res}       990{txt}{space 10}{res}        11{txt}  {c |}      2          1           4
+  cycletheft~1 {c |}{res}       990{txt}{space 10}{res}        11{txt}  {c |}      4          1           5
+  cycletheft~2 {c |}{res}     1,000{txt}{space 10}{res}         1{txt}  {c |}      1          2           2
+    burglaryyn {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      4       -999           2
+   burglarynum {c |}{res}       989{txt}{space 10}{res}        12{txt}  {c |}      2          1           3
+  attemptedb~n {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      2          1           2
+  attemptedb~m {c |}{res}       998{txt}{space 10}{res}         3{txt}  {c |}      2          1           3
+   vandalismyn {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      3       -999           2
+  vandalismnum {c |}{res}     1,000{txt}{space 10}{res}         1{txt}  {c |}      1          1           1
+  trespassin~n {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      3       -997           2
+  trespassin~m {c |}{res}       997{txt}{space 10}{res}         4{txt}  {c |}      1          1           1
+     robberyyn {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      2          1           2
+    robberynum {c |}{res}     1,000{txt}{space 10}{res}         1{txt}  {c |}      1          1           1
+  robberyvic~1 {c |}{res}     1,000{txt}{space 10}{res}         1{txt}  {c |}      1          1           1
+  robberyvic~2 {c |}{res}     1,001{txt}{space 10}{res}         0{txt}  {c |}      0          .           .
+       theftyn {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      2          1           2
+      theftnum {c |}{res}       986{txt}{space 10}{res}        15{txt}  {c |}      3          1           3
+  theftvicti~1 {c |}{res}       986{txt}{space 10}{res}        15{txt}  {c |}      5          1           8
+  theftvicti~2 {c |}{res}     1,001{txt}{space 10}{res}         0{txt}  {c |}      0          .           .
+  thanavisityn {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      4          1          99
+        _merge {c |}{res}         2{txt}{space 10}{res}       999{txt}  {c |}      2          2           3
+  {hline 13}{c BT}{hline 32}{c BT}{hline 30}
+
+{com}. missingplot,  cycletheft~2  own2wheele~1 trespassin~m labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{err}option {bf:cycletheft} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot, own2whee~2 robberyv~2 thanavis~2 theftvic~2 cyclethe~2 own4w~tnum robberynum labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{err}option {bf:own2whee} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. mdesc
+{err}command {bf}mdesc{sf} is unrecognized
+{txt}{search r(199), local:r(199);}
+
+{com}. missingplot, robberyyn cycleownyn own2wheeleryn labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{err}option {bf:robberyyn} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. sysuse nlsw88, clear
+{txt}(NLSW, 1988 extract)
+
+{com}. missingplot, union hours wage occupation industry grade labels mlabcolor(blue ..)
+{err}option {bf:union} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot, hours wage occupation industry grade labels mlabcolor(blue ..)
+{err}option {bf:hours} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot, wage occupation industry grade labels mlabcolor(blue ..)
+{err}option {bf:wage} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot,occupation industry grade labels mlabcolor(blue ..)
+{err}option {bf:occupation} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot,industry grade labels mlabcolor(blue ..)
+{err}option {bf:industry} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot,industry grade labels mlabcolor(blue)
+{err}option {bf:industry} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot,grade labels mlabcolor(blue ..)
+{err}option {bf:grade} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot,labels mlabcolor(blue ..)
+{res}
+{com}. use "D:\Practice stata\Main Dataset.dta", clear
+
+. merge 1:1 uniqueid using "D:\Practice stata\New Observations.dta"
+{res}{txt}(label treatment already defined)
+(label gender already defined)
+(label occup already defined)
+(label castecode already defined)
+(label standard already defined)
+(label yesno already defined)
+(label yes1no0 already defined)
+
+{col 5}Result{col 38}# of obs.
+{col 5}{hline 41}
+{col 5}not matched{col 30}{res}           1,001
+{txt}{col 9}from master{col 30}{res}             999{txt}  (_merge==1)
+{col 9}from using{col 30}{res}               2{txt}  (_merge==2)
+
+{col 5}matched{col 30}{res}               0{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. append using "D:\Practice stata\New Observations.dta"
+{txt}(label treatment already defined)
+(label gender already defined)
+(label occup already defined)
+(label castecode already defined)
+(label standard already defined)
+(label yesno already defined)
+(label yes1no0 already defined)
+
+{com}. missingplot,own2wheelertheftvictim_2 cycletheftyn burglaryyn theftvictim_2 labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{err}option {bf:own2wheelertheftvictim_2} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot,cycletheftyn burglaryyn theftvictim_2 labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{err}option {bf:cycletheftyn} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot,burglaryyn theftvictim_2 labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{err}option {bf:burglaryyn} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot,theftvictim_2 labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{err}option {bf:theftvictim_2} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot,labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{res}
+{com}. missingplot,labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{res}
+{com}. missingplot,mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{res}
+{com}. missingplot,mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{res}
+{com}. missingplot, theftfromcaryn burglarynum castename areadur labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{err}option {bf:theftfromcaryn} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot,theftfromcaryn burglarynum castename areadur labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{err}option {bf:theftfromcaryn} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot,burglarynum castename areadur labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{err}option {bf:burglarynum} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot, castename areadur labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{err}option {bf:castename} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot, areadur labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{err}option {bf:areadur} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot,labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{res}
+{com}. missingplot,mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{res}
+{com}. missingplot,addressdur_unit age literateyn castecode labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{err}option {bf:addressdur_unit} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot,age literateyn castecode labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{err}option {bf:age} not allowed
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot,"addressdur_unit age literateyn castecode" labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{err}quotes unbalanced
+{txt}{search r(198), local:r(198);}
+
+{com}. missingplot,mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{res}
+{com}. twoway scatter income burglaryyn
+{res}
+{com}. twoway scatter income robberyyn
+{res}
+{com}. twoway scatter robberyyn income
+{res}
+{com}. twoway scatter robberyyn educ
+{res}
+{com}. twoway scatter areadur own4wheeleryn
+{res}
+{com}. twoway scatter own4wheeleryn age
+{res}
+{com}. twoway scatter own4wheeleryn theftfromcaryn
+{res}
+{com}. twoway scatter own4wheeleryn theftfromcarnum
+{res}
+{com}. twoway scatter own4wheeleryn treatment
+{res}
+{com}. twoway scatter cycleownvalue trespassingyn
+{res}
+{com}. twoway scatter robberyvictim_1 thanavisityn
+{res}
+{com}. twoway scatter robberyyn thanavisityn
+{res}
+{com}. twoway scatter propval100 income
+{err}variable {bf}propval100{sf} not found
+{txt}{search r(111), local:r(111);}
+
+{com}. twoway scatter income theftyn
+{res}
+{com}. twoway scatter income castename
+{err}string variables not allowed in varlist;
+{bf}castename{sf} is a string variable
+{txt}{search r(109), local:r(109);}
+
+{com}. twoway scatter income castecode
+{res}
+{com}. twoway (scatter income castecode) (lfit income castecode)
+{res}
+{com}. twoway (scatter income vandalismnum ) (lfit income vandalismnum )
+{txt}(note:  regress could not fit model)
+{err}insufficient observations
+{txt}{search r(2001), local:r(2001);}
+
+{com}. twoway scatter income vandalismnum
+{res}
+{com}. twoway scatter castecode vandalismnum
+{res}
+{com}. use nlsw.dta
+{err}no; data in memory would be lost
+{txt}{search r(4), local:r(4);}
+
+{com}. log close
+      {txt}name:  {res}<unnamed>
+       {txt}log:  {res}D:\Practice stata\Log file.smcl
+  {txt}log type:  {res}smcl
+ {txt}closed on:  {res} 5 Aug 2023, 18:45:54
+{txt}{.-}
+{smcl}
+{txt}{sf}{ul off}

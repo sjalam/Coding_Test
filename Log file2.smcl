@@ -1,0 +1,542 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}D:\Practice stata\Log file2.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res} 6 Aug 2023, 01:27:20
+
+{com}. import delimited "D:\Practice stata\New Variables.csv", clear
+{res}{text}(7 vars, 949 obs)
+
+{com}. 
+. merge 1:1 uniqueid using "D:\Practice stata\Main Dataset.dta"
+{res}{txt}{p 0 7 2}
+(note: variable
+uniqueid was 
+int, now float to accommodate using data's values)
+{p_end}
+
+{col 5}Result{col 38}# of obs.
+{col 5}{hline 41}
+{col 5}not matched{col 30}{res}              50
+{txt}{col 9}from master{col 30}{res}               0{txt}  (_merge==1)
+{col 9}from using{col 30}{res}              50{txt}  (_merge==2)
+
+{col 5}matched{col 30}{res}             949{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. 
+. append using "D:\Practice stata\New Observations.dta"
+{txt}(label treatment already defined)
+(label gender already defined)
+(label occup already defined)
+(label castecode already defined)
+(label standard already defined)
+(label yesno already defined)
+(label yes1no0 already defined)
+
+{com}. sum income age surveytime, d
+
+                        {txt}Weekly income
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}      185              0
+{txt} 5%    {res}      829              0
+{txt}10%    {res}     1141              0       {txt}Obs         {res}      1,001
+{txt}25%    {res}     1825              0       {txt}Sum of Wgt. {res}      1,001
+
+{txt}50%    {res}     2455                      {txt}Mean          {res} 2505.863
+                        {txt}Largest       Std. Dev.     {res} 1026.513
+{txt}75%    {res}     3211           5759
+{txt}90%    {res}     3788           5830       {txt}Variance      {res}  1053729
+{txt}95%    {res}     4137           5871       {txt}Skewness      {res} .1292969
+{txt}99%    {res}     5033           6051       {txt}Kurtosis      {res} 3.096619
+
+                      {txt}How old are you?
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}       19             18
+{txt} 5%    {res}     22.5             18
+{txt}10%    {res}     25.5             18       {txt}Obs         {res}      1,000
+{txt}25%    {res}       34             18       {txt}Sum of Wgt. {res}      1,000
+
+{txt}50%    {res}       45                      {txt}Mean          {res}  334.636
+                        {txt}Largest       Std. Dev.     {res} 691.6502
+{txt}75%    {res}       65           1990
+{txt}90%    {res}     1977           1990       {txt}Variance      {res}   478380
+{txt}95%    {res}     1983           1990       {txt}Skewness      {res} 1.958564
+{txt}99%    {res}     1989           1990       {txt}Kurtosis      {res} 4.839525
+
+                {txt}Length of Survey (in seconds)
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}     4856           3757
+{txt} 5%    {res}     5641           4337
+{txt}10%    {res}     5979           4433       {txt}Obs         {res}      1,001
+{txt}25%    {res}     6496           4517       {txt}Sum of Wgt. {res}      1,001
+
+{txt}50%    {res}     7162                      {txt}Mean          {res} 7196.041
+                        {txt}Largest       Std. Dev.     {res} 984.4501
+{txt}75%    {res}     7858          10042
+{txt}90%    {res}     8449          10078       {txt}Variance      {res}   969142
+{txt}95%    {res}     8831          10181       {txt}Skewness      {res} .0370432
+{txt}99%    {res}     9487          10208       {txt}Kurtosis      {res} 3.015273
+
+{com}. 
+. replace age = 48 in 3
+{txt}(1 real change made)
+
+{com}. 
+. estpost summarize income age surveytime, listwise
+
+{txt}{space 0}{space 0}{ralign 12:}{space 1}{c |}{space 1}{ralign 9:e(count)}{space 1}{space 1}{ralign 9:e(sum_w)}{space 1}{space 1}{ralign 9:e(mean)}{space 1}{space 1}{ralign 9:e(Var)}{space 1}
+{space 0}{hline 13}{c   +}{hline 11}{hline 11}{hline 11}{hline 11}
+{space 0}{space 0}{ralign 12:income}{space 1}{c |}{space 1}{ralign 9:{res:{sf:     1000}}}{space 1}{space 1}{ralign 9:{res:{sf:     1000}}}{space 1}{space 1}{ralign 9:{res:{sf: 2506.046}}}{space 1}{space 1}{ralign 9:{res:{sf:  1054750}}}{space 1}
+{space 0}{space 0}{ralign 12:age}{space 1}{c |}{space 1}{ralign 9:{res:{sf:     1000}}}{space 1}{space 1}{ralign 9:{res:{sf:     1000}}}{space 1}{space 1}{ralign 9:{res:{sf:  332.709}}}{space 1}{space 1}{ralign 9:{res:{sf:   475765}}}{space 1}
+{space 0}{space 0}{ralign 12:surveytime}{space 1}{c |}{space 1}{ralign 9:{res:{sf:     1000}}}{space 1}{space 1}{ralign 9:{res:{sf:     1000}}}{space 1}{space 1}{ralign 9:{res:{sf: 7194.242}}}{space 1}{space 1}{ralign 9:{res:{sf: 966869.4}}}{space 1}
+
+{space 0}{space 0}{ralign 12:}{space 1}{c |}{space 1}{ralign 9:e(sd)}{space 1}{space 1}{ralign 9:e(min)}{space 1}{space 1}{ralign 9:e(max)}{space 1}{space 1}{ralign 9:e(sum)}{space 1}
+{space 0}{hline 13}{c   +}{hline 11}{hline 11}{hline 11}{hline 11}
+{space 0}{space 0}{ralign 12:income}{space 1}{c |}{space 1}{ralign 9:{res:{sf:  1027.01}}}{space 1}{space 1}{ralign 9:{res:{sf:        0}}}{space 1}{space 1}{ralign 9:{res:{sf:     6051}}}{space 1}{space 1}{ralign 9:{res:{sf:  2506046}}}{space 1}
+{space 0}{space 0}{ralign 12:age}{space 1}{c |}{space 1}{ralign 9:{res:{sf: 689.7572}}}{space 1}{space 1}{ralign 9:{res:{sf:       18}}}{space 1}{space 1}{ralign 9:{res:{sf:     1990}}}{space 1}{space 1}{ralign 9:{res:{sf:   332709}}}{space 1}
+{space 0}{space 0}{ralign 12:surveytime}{space 1}{c |}{space 1}{ralign 9:{res:{sf: 983.2952}}}{space 1}{space 1}{ralign 9:{res:{sf:     3757}}}{space 1}{space 1}{ralign 9:{res:{sf:    10208}}}{space 1}{space 1}{ralign 9:{res:{sf:  7194242}}}{space 1}
+
+{com}. 
+. esttab, cells("mean sd min max") nomtitle nonumber
+{res}
+{txt}{hline 64}
+{txt}                     mean           sd          min          max
+{txt}{hline 64}
+{txt}income      {res}     2506.046      1027.01            0         6051{txt}
+{txt}age         {res}      332.709     689.7572           18         1990{txt}
+{txt}surveytime  {res}     7194.242     983.2952         3757        10208{txt}
+{txt}{hline 64}
+{txt}N           {res}         1000                                       {txt}
+{txt}{hline 64}
+
+{com}. 
+. eststo: quietly summarize income age surveytime
+{txt}({res}est1{txt} stored)
+
+{com}. esttab, cells("mean(fmt(%9.2f))  sd(fmt(%9.2f))") title("Summary Statistics") label
+{res}
+{txt}Summary Statistics
+{txt}{hline 46}
+{txt}                              (1)             
+{txt}                                              
+{txt}                             mean           sd
+{txt}{hline 46}
+{txt}Weekly income       {res}      2506.05      1027.01{txt}
+{txt}How old are you?    {res}       332.71       689.76{txt}
+{txt}Length of Survey (~){res}      7194.24       983.30{txt}
+{txt}{hline 46}
+{txt}Observations        {res}         1000             {txt}
+{txt}{hline 46}
+
+{com}. duplicates report
+
+{p 0 4}{txt}Duplicates in terms of {txt} all variables{p_end}
+
+{hline 10}{c TT}{hline 27}
+   copies {c |} observations       surplus
+{hline 10}{c +}{hline 27}
+        1 {c |}         {res}1001             0
+{txt}{hline 10}{c BT}{hline 27}
+
+{com}. 
+. duplicates report hhid
+
+{p 0 4}{txt}Duplicates in terms of {res} hhid{p_end}
+
+{txt}{hline 10}{c TT}{hline 27}
+   copies {c |} observations       surplus
+{hline 10}{c +}{hline 27}
+        1 {c |}          {res}995             0
+        {txt}2 {c |}            {res}6             3
+{txt}{hline 10}{c BT}{hline 27}
+
+{com}. duplicates drop
+
+{p 0 4}{txt}Duplicates in terms of {txt} all variables{p_end}
+
+(0 observations are duplicates)
+
+{com}. misstable summarize
+{txt}{col 64}Obs<.
+{col 49}{c TLC}{hline 30}
+{col 16}{c |}{col 49}{c |} Unique
+{col 7}Variable {c |}{col 22}Obs=.{col 32}Obs>.{col 42}Obs<.{col 49}{c |} values{col 65}Min{col 77}Max
+  {hline 13}{c +}{hline 32}{c +}{hline 30}
+   surveytime2 {c |}{res}        52{txt}{space 10}{res}       949{txt}  {c |}   >500   62.61666    170.1333
+  thanavisit~2 {c |}{res}     1,001{txt}{space 10}{res}         0{txt}  {c |}      0          .           .
+          exit {c |}{res}        52{txt}{space 10}{res}       949{txt}  {c |}      1          1           1
+      base_age {c |}{res}        53{txt}{space 10}{res}       948{txt}  {c |}     84         17        1990
+   base_income {c |}{res}        52{txt}{space 10}{res}       949{txt}  {c |}   >500      -1283        6063
+  superpresent {c |}{res}         3{txt}{space 10}{res}       998{txt}  {c |}      2          0           1
+  backchecke~n {c |}{res}        26{txt}{space 10}{res}       975{txt}  {c |}      2          0           1
+           age {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}     84         18        1990
+          educ {c |}{res}        12{txt}{space 10}{res}       989{txt}  {c |}     16          0          15
+    addressdur {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}     84          1          99
+       areadur {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}     85          1          99
+     castecode {c |}{res}       865{txt}{space 10}{res}       136{txt}  {c |}      6          1           6
+    literateyn {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      2          0           1
+  own4whe~rnum {c |}{res}       909{txt}{space 10}{res}        92{txt}  {c |}      3          1           3
+  own4wheele~e {c |}{res}       911{txt}{space 10}{res}        90{txt}  {c |}     82        103        9812
+  own4wheele~t {c |}{res}       911{txt}{space 10}{res}        90{txt}  {c |}      2          0           1
+  own4whe~tnum {c |}{res}     1,000{txt}{space 10}{res}         1{txt}  {c |}      1          1           1
+  theftfromc~n {c |}{res}       911{txt}{space 10}{res}        90{txt}  {c |}      2          0           1
+  theftfromc~m {c |}{res}       998{txt}{space 10}{res}         3{txt}  {c |}      1          1           1
+  own2wheele~n {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      2          1           2
+  own2whe~rnum {c |}{res}       763{txt}{space 10}{res}       238{txt}  {c |}      4          1           4
+  own2wheele~e {c |}{res}       763{txt}{space 10}{res}       238{txt}  {c |}    213        137        3493
+  own2wheele~t {c |}{res}       761{txt}{space 10}{res}       240{txt}  {c |}      3          1          99
+  own2whe~tnum {c |}{res}       984{txt}{space 10}{res}        17{txt}  {c |}      1          1           1
+  own2wheele~1 {c |}{res}       984{txt}{space 10}{res}        17{txt}  {c |}      1          1           1
+  own2wheele~2 {c |}{res}     1,001{txt}{space 10}{res}         0{txt}  {c |}      0          .           .
+   cycleownnum {c |}{res}       601{txt}{space 10}{res}       400{txt}  {c |}      5          1           5
+  cycleownva~e {c |}{res}       601{txt}{space 10}{res}       400{txt}  {c |}    332        117        9046
+  cycletheftyn {c |}{res}       601{txt}{space 10}{res}       400{txt}  {c |}      3          1          99
+  cycletheft~m {c |}{res}       990{txt}{space 10}{res}        11{txt}  {c |}      2          1           4
+  cycletheft~1 {c |}{res}       990{txt}{space 10}{res}        11{txt}  {c |}      4          1           5
+  cycletheft~2 {c |}{res}     1,000{txt}{space 10}{res}         1{txt}  {c |}      1          2           2
+    burglaryyn {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      4       -999           2
+   burglarynum {c |}{res}       989{txt}{space 10}{res}        12{txt}  {c |}      2          1           3
+  attemptedb~n {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      2          1           2
+  attemptedb~m {c |}{res}       998{txt}{space 10}{res}         3{txt}  {c |}      2          1           3
+   vandalismyn {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      3       -999           2
+  vandalismnum {c |}{res}     1,000{txt}{space 10}{res}         1{txt}  {c |}      1          1           1
+  trespassin~n {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      3       -997           2
+  trespassin~m {c |}{res}       997{txt}{space 10}{res}         4{txt}  {c |}      1          1           1
+     robberyyn {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      2          1           2
+    robberynum {c |}{res}     1,000{txt}{space 10}{res}         1{txt}  {c |}      1          1           1
+  robberyvic~1 {c |}{res}     1,000{txt}{space 10}{res}         1{txt}  {c |}      1          1           1
+  robberyvic~2 {c |}{res}     1,001{txt}{space 10}{res}         0{txt}  {c |}      0          .           .
+       theftyn {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      2          1           2
+      theftnum {c |}{res}       986{txt}{space 10}{res}        15{txt}  {c |}      3          1           3
+  theftvicti~1 {c |}{res}       986{txt}{space 10}{res}        15{txt}  {c |}      5          1           8
+  theftvicti~2 {c |}{res}     1,001{txt}{space 10}{res}         0{txt}  {c |}      0          .           .
+  thanavisityn {c |}{res}         1{txt}{space 10}{res}     1,000{txt}  {c |}      4          1          99
+        _merge {c |}{res}         2{txt}{space 10}{res}       999{txt}  {c |}      2          2           3
+  {hline 13}{c BT}{hline 32}{c BT}{hline 30}
+
+{com}. misstable tree, frequency
+{res}{txt}(only 7 variables shown)
+{txt}
+{space 2}Nested pattern of missing values
+{space 1} own2whee~2 robberyv~2 thanavis~2 theftvic~2 cyclethe~2 own4w~tnum robberynum
+{space 2}{hline 76}
+{space 2}{res:     1,001} {res:     1,001} {res:     1,001} {res:     1,001} {res:     1,000} {res:       999} {res:       998} 
+{space 68}{res:         1} 
+{space 57}{res:         1} {res:         1} 
+{space 68}{res:         0} 
+{space 46}{res:         1} {res:         1} {res:         1} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 24}{res:         0} {res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 13}{res:         0} {res:         0} {res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 24}{res:         0} {res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 2}{res:         0} {res:         0} {res:         0} {res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 24}{res:         0} {res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 13}{res:         0} {res:         0} {res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 24}{res:         0} {res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 35}{res:         0} {res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 46}{res:         0} {res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 57}{res:         0} {res:         0} 
+{space 68}{res:         0} 
+{space 2}{hline 76}
+{p 1 2 2}
+(number missing listed first)
+{p_end}
+
+{com}. ssc install missingplot
+{txt}checking {hilite:missingplot} consistency and verifying not already installed...
+all files already exist and are up to date.
+
+{com}. missingplot,labels mlabcolor(blue ..)
+{txt}note: only first 20 variables plotted
+{res}
+{com}. replace age = 48 if age == 1975
+{txt}(4 real changes made)
+
+{com}. 
+. replace age = 48 if age == 1975
+{txt}(0 real changes made)
+
+{com}. 
+. replace age = 40 if age == 1983
+{txt}(8 real changes made)
+
+{com}. 
+. replace age = 54 if age == 1971
+{txt}(8 real changes made)
+
+{com}. 
+. replace age = 47 if age == 1976
+{txt}(6 real changes made)
+
+{com}. 
+. replace age = 47 if age == 1976
+{txt}(0 real changes made)
+
+{com}. 
+. replace age = 45 if age == 1978
+{txt}(5 real changes made)
+
+{com}. 
+. replace age = 46 if age == 1977
+{txt}(11 real changes made)
+
+{com}. 
+. replace age = 42 if age == 1979
+{txt}(12 real changes made)
+
+{com}. 
+. replace age = 44 if age == 1982
+{txt}(8 real changes made)
+
+{com}. 
+. replace age = 53 if age == 1970
+{txt}(7 real changes made)
+
+{com}. 
+. replace age = 33 if age == 1990
+{txt}(6 real changes made)
+
+{com}. 
+. replace age = 37 if age == 1986
+{txt}(9 real changes made)
+
+{com}. 
+. replace age = 34 if age == 1989
+{txt}(6 real changes made)
+
+{com}. 
+. replace age = 47 if age == 1974
+{txt}(5 real changes made)
+
+{com}. 
+. replace age = 49 if age == 1972
+{txt}(8 real changes made)
+
+{com}. 
+. replace age = 30 if age == 1987
+{txt}(3 real changes made)
+
+{com}. 
+. replace age = 29 if age == 1988
+{txt}(5 real changes made)
+
+{com}. 
+. replace age = 38 if age == 1985
+{txt}(10 real changes made)
+
+{com}. 
+. replace age = 54 if age == 1981
+{txt}(13 real changes made)
+
+{com}. 
+. replace age = 53 if age == 1980
+{txt}(6 real changes made)
+
+{com}. 
+. replace age = 50 if age == 1973
+{txt}(4 real changes made)
+
+{com}. 
+. replace age = 39 if age == 1984
+{txt}(5 real changes made)
+
+{com}. destring surveyor,replace
+{txt}surveyor contains nonnumeric characters; no {res}replace
+
+{com}. replace surveyor = "1" if surveyor = "Benjamin"
+{err}type mismatch
+{txt}{search r(109), local:r(109);}
+
+{com}. replace surveyor = "1" if surveyor == "Benjamin"
+{txt}(143 real changes made)
+
+{com}. replace surveyor = "2" if surveyor == "Peter"
+{txt}(45 real changes made)
+
+{com}. 
+. replace surveyor = "3" if surveyor == "Anna"
+{txt}(125 real changes made)
+
+{com}. 
+. replace surveyor = "4" if surveyor == "Mary"
+{txt}(154 real changes made)
+
+{com}. 
+. replace surveyor = "5" if surveyor == "John"
+{txt}(70 real changes made)
+
+{com}. 
+. replace surveyor = "6" if surveyor == "Caroline"
+{txt}(64 real changes made)
+
+{com}. 
+. replace surveyor = "7" if surveyor == "Joseph"
+{txt}(69 real changes made)
+
+{com}. 
+. replace surveyor = "8" if surveyor == "David"
+{txt}(158 real changes made)
+
+{com}. 
+. replace surveyor = "9" if surveyor == "Sam"
+{txt}(101 real changes made)
+
+{com}. 
+. replace surveyor = "10" if surveyor == "Grace"
+{txt}(55 real changes made)
+
+{com}. replace surveyor = "11" if surveyor == "Jane"
+{txt}(17 real changes made)
+
+{com}. recode burglaryyn vandalismyn trespassingyn (-999 = .r)
+{txt}(burglaryyn: 4 changes made)
+(vandalismyn: 5 changes made)
+(trespassingyn: 0 changes made)
+
+{com}. 
+. recode burglaryyn vandalismyn trespassingyn (-666 = .)
+{txt}(burglaryyn: 0 changes made)
+(vandalismyn: 0 changes made)
+(trespassingyn: 0 changes made)
+
+{com}. 
+. recode burglaryyn vandalismyn trespassingyn (-997 = .d)
+{txt}(burglaryyn: 7 changes made)
+(vandalismyn: 0 changes made)
+(trespassingyn: 9 changes made)
+
+{com}. 
+. recode burglaryyn vandalismyn trespassingyn (-777 = .b)
+{txt}(burglaryyn: 0 changes made)
+(vandalismyn: 0 changes made)
+(trespassingyn: 0 changes made)
+
+{com}. 
+. recode burglaryyn vandalismyn trespassingyn (-555 = .n)
+{txt}(burglaryyn: 0 changes made)
+(vandalismyn: 0 changes made)
+(trespassingyn: 0 changes made)
+
+{com}. sum age
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 9}age {c |}{res}      1,000      44.276    14.88501         18         90
+
+{com}. 

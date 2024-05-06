@@ -1,0 +1,34 @@
+\documentclass[10pt,a4paper,twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\author{S.J.Alam}
+\title{Introduction to Latex}
+
+\usepackage{booktabs}
+\usepackage{dcolumn}
+\usepackage{geometry}
+
+
+\newcommand{\ignore}[1]{}
+\begin{document}
+  \begin{table}[htbp]\centering
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\caption{Descriptive Statistics}
+\begin{tabular}{l*{1}{rrrrrr}}
+\toprule
+                    &\multicolumn{6}{c}{}                                                         \\
+                    &        Mean&          SD&      Median&     Minimum&     Maximum&      Number\\
+\midrule
+Income              &     2505.86&     1026.51&     2455.00&           0&        6051&        1001\\
+Age                 &       44.28&       14.89&       42.50&          18&          90&        1000\\
+Survey Time         &      119.93&       16.41&      119.37&          63&         170&        1001\\
+\midrule
+Observations        &        1001&            &            &            &            &            \\
+\bottomrule
+\multicolumn{7}{l}{\footnotesize Source Nishith sir's Data Test}\\
+\end{tabular}
+\end{table}

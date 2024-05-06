@@ -1,0 +1,470 @@
+{smcl}
+{com}{sf}{ul off}{txt}{.-}
+      name:  {res}<unnamed>
+       {txt}log:  {res}C:\Users\HP\Desktop\Stata Pract\Nishit Test\New log fole for practice.smcl
+  {txt}log type:  {res}smcl
+ {txt}opened on:  {res}31 Oct 2023, 11:29:36
+
+{com}. import delimited "C:\Users\HP\Desktop\Stata Pract\Nishit Test\New Variables.csv"
+{res}{text}(7 vars, 949 obs)
+
+{com}. merge 1:1 _n using "C:\Users\HP\Desktop\Stata Pract\Nishit Test\Main Dataset.dta"
+{res}{txt}{p 0 7 2}
+(note: variable
+uniqueid was 
+int, now float to accommodate using data's values)
+{p_end}
+
+{col 5}Result{col 38}# of obs.
+{col 5}{hline 41}
+{col 5}not matched{col 30}{res}              50
+{txt}{col 9}from master{col 30}{res}               0{txt}  (_merge==1)
+{col 9}from using{col 30}{res}              50{txt}  (_merge==2)
+
+{col 5}matched{col 30}{res}             949{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. append using "C:\Users\HP\Desktop\Stata Pract\Nishit Test\New Observations.dta"
+{txt}(label treatment already defined)
+(label gender already defined)
+(label occup already defined)
+(label castecode already defined)
+(label standard already defined)
+(label yesno already defined)
+(label yes1no0 already defined)
+
+{com}. sum income age surveytime
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 6}income {c |}{res}      1,001    2505.863    1026.513          0       6051
+{txt}{space 9}age {c |}{res}      1,000     334.636    691.6502         18       1990
+{txt}{space 2}surveytime {c |}{res}      1,001    7196.041    984.4501       3757      10208
+
+{com}.     replace age = 54 if age == 1971
+{txt}(8 real changes made)
+
+{com}.     replace age = 53 if age == 1980
+{txt}(6 real changes made)
+
+{com}.     replace age = 53 if age == 1970
+{txt}(7 real changes made)
+
+{com}.     replace age = 50 if age == 1973
+{txt}(4 real changes made)
+
+{com}.     replace age = 49 if age == 1972
+{txt}(8 real changes made)
+
+{com}.     replace age = 48 if age == 1975
+{txt}(5 real changes made)
+
+{com}.     replace age = 47 if age == 1976
+{txt}(6 real changes made)
+
+{com}.     replace age = 47 if age == 1974
+{txt}(5 real changes made)
+
+{com}.     replace age = 46 if age == 1978
+{txt}(5 real changes made)
+
+{com}.     replace age = 46 if age == 1977
+{txt}(11 real changes made)
+
+{com}.     replace age = 45 if age == 1978
+{txt}(0 real changes made)
+
+{com}.     replace age = 44 if age == 1982
+{txt}(8 real changes made)
+
+{com}.     replace age = 42 if age == 1979
+{txt}(12 real changes made)
+
+{com}.     replace age = 40 if age == 1983
+{txt}(8 real changes made)
+
+{com}.     replace age = 39 if age == 1984
+{txt}(5 real changes made)
+
+{com}.     replace age = 38 if age == 1985
+{txt}(10 real changes made)
+
+{com}.     replace age = 37 if age == 1986
+{txt}(9 real changes made)
+
+{com}.     replace age = 34 if age == 1989
+{txt}(6 real changes made)
+
+{com}.     replace age = 33 if age == 1990
+{txt}(6 real changes made)
+
+{com}.     replace age = 30 if age == 1987
+{txt}(3 real changes made)
+
+{com}.     replace age = 29 if age == 1988
+{txt}(5 real changes made)
+
+{com}. sum age
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 9}age {c |}{res}      1,000      69.332    220.0055         18       1981
+
+{com}. replace age = 54 if age == 1981
+{txt}(13 real changes made)
+
+{com}. sum age
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 9}age {c |}{res}      1,000      44.281    14.88542         18         90
+
+{com}. sum age, detail
+
+                      {txt}How old are you?
+{hline 61}
+      Percentiles      Smallest
+ 1%    {res}       19             18
+{txt} 5%    {res}     22.5             18
+{txt}10%    {res}     25.5             18       {txt}Obs         {res}      1,000
+{txt}25%    {res}       33             18       {txt}Sum of Wgt. {res}      1,000
+
+{txt}50%    {res}     42.5                      {txt}Mean          {res}   44.281
+                        {txt}Largest       Std. Dev.     {res} 14.88542
+{txt}75%    {res}       54             88
+{txt}90%    {res}       65             90       {txt}Variance      {res} 221.5756
+{txt}95%    {res}       72             90       {txt}Skewness      {res} .5291962
+{txt}99%    {res}       80             90       {txt}Kurtosis      {res} 2.742005
+
+{com}. estpost tabstat income age surveytime, s(mean sd median) c(s)
+
+{txt}Summary statistics: mean sd p50
+     for variables: income age surveytime
+
+{space 0}{space 0}{ralign 12:}{space 1}{c |}{space 1}{ralign 9:e(mean)}{space 1}{space 1}{ralign 9:e(sd)}{space 1}{space 1}{ralign 9:e(p50)}{space 1}
+{space 0}{hline 13}{c   +}{hline 11}{hline 11}{hline 11}
+{space 0}{space 0}{ralign 12:income}{space 1}{c |}{space 1}{ralign 9:{res:{sf: 2505.863}}}{space 1}{space 1}{ralign 9:{res:{sf: 1026.513}}}{space 1}{space 1}{ralign 9:{res:{sf:     2455}}}{space 1}
+{space 0}{space 0}{ralign 12:age}{space 1}{c |}{space 1}{ralign 9:{res:{sf:   44.281}}}{space 1}{space 1}{ralign 9:{res:{sf: 14.88542}}}{space 1}{space 1}{ralign 9:{res:{sf:     42.5}}}{space 1}
+{space 0}{space 0}{ralign 12:surveytime}{space 1}{c |}{space 1}{ralign 9:{res:{sf: 7196.041}}}{space 1}{space 1}{ralign 9:{res:{sf: 984.4501}}}{space 1}{space 1}{ralign 9:{res:{sf:     7162}}}{space 1}
+
+{com}. eststo DescTot
+
+. esttab DescTot using table1a.tex, replace booktabs align(rrr) nodep nonum noparen label cells("mean(fmt(2) label(Mean)) sd(fmt(2) label(SD)) p50(fmt(2) label(Median))") coefl(income "Income" age "Age" survetime "Survey Time") title("Descriptive Statistics") mtitle("") note("Source Nishith sir's Test")
+{res}{txt}(output written to {browse  `"table1a.tex"'})
+
+{com}. duplicates report hhid
+
+{p 0 4}{txt}Duplicates in terms of {res} hhid{p_end}
+
+{txt}{hline 10}{c TT}{hline 27}
+   copies {c |} observations       surplus
+{hline 10}{c +}{hline 27}
+        1 {c |}          {res}995             0
+        {txt}2 {c |}            {res}6             3
+{txt}{hline 10}{c BT}{hline 27}
+
+{com}. duplicates drop
+
+{p 0 4}{txt}Duplicates in terms of {txt} all variables{p_end}
+
+(0 observations are duplicates)
+
+{com}. duplicates report hhid
+
+{p 0 4}{txt}Duplicates in terms of {res} hhid{p_end}
+
+{txt}{hline 10}{c TT}{hline 27}
+   copies {c |} observations       surplus
+{hline 10}{c +}{hline 27}
+        1 {c |}          {res}995             0
+        {txt}2 {c |}            {res}6             3
+{txt}{hline 10}{c BT}{hline 27}
+
+{com}. duplicates dropduplicates list hhid
+{err}illegal {cmd}duplicates {err}subcommand
+{txt}{search r(198), local:r(198);}
+
+{com}. duplicates list hhid
+
+{p 0 4}{txt}Duplicates in terms of {res} hhid{p_end}
+{txt}
+  {c TLC}{hline 8}{c -}{hline 6}{c -}{hline 9}{c TRC}
+  {c |} {res}group:   obs:      hhid {txt}{c |}
+  {c LT}{hline 8}{c -}{hline 6}{c -}{hline 9}{c RT}
+  {c |} {res}     1    597   1802011 {txt}{c |}
+  {c |} {res}     1    598   1802011 {txt}{c |}
+  {c |} {res}     2    641   1807077 {txt}{c |}
+  {c |} {res}     2    642   1807077 {txt}{c |}
+  {c |} {res}     3    679   1813023 {txt}{c |}
+  {c LT}{hline 8}{c -}{hline 6}{c -}{hline 9}{c RT}
+  {c |} {res}     3    680   1813023 {txt}{c |}
+  {c BLC}{hline 8}{c -}{hline 6}{c -}{hline 9}{c BRC}
+
+{com}. sort hhid
+
+. duplicate report hhid
+{err}command {bf}duplicate{sf} is unrecognized
+{txt}{search r(199), local:r(199);}
+
+{com}. duplicates report hhid
+
+{p 0 4}{txt}Duplicates in terms of {res} hhid{p_end}
+
+{txt}{hline 10}{c TT}{hline 27}
+   copies {c |} observations       surplus
+{hline 10}{c +}{hline 27}
+        1 {c |}          {res}995             0
+        {txt}2 {c |}            {res}6             3
+{txt}{hline 10}{c BT}{hline 27}
+
+{com}. egen unique_hhid = group(hhid)
+
+. collapse (mean) mean_age = age (mean) mean_income = income, by(unique_hhid)
+
+. sum income
+{err}variable {bf}income{sf} not found
+{txt}{search r(111), local:r(111);}
+
+{com}. help baack
+
+. help previous data
+
+. clear
+
+. import delimited "C:\Users\HP\Desktop\Stata Pract\Nishit Test\New Variables.csv"
+{res}{text}(7 vars, 949 obs)
+
+{com}. merge 1:1 _n using "C:\Users\HP\Desktop\Stata Pract\Nishit Test\Main Dataset.dta"
+{res}{txt}{p 0 7 2}
+(note: variable
+uniqueid was 
+int, now float to accommodate using data's values)
+{p_end}
+
+{col 5}Result{col 38}# of obs.
+{col 5}{hline 41}
+{col 5}not matched{col 30}{res}              50
+{txt}{col 9}from master{col 30}{res}               0{txt}  (_merge==1)
+{col 9}from using{col 30}{res}              50{txt}  (_merge==2)
+
+{col 5}matched{col 30}{res}             949{txt}  (_merge==3)
+{col 5}{hline 41}
+
+{com}. append using "C:\Users\HP\Desktop\Stata Pract\Nishit Test\New Observations.dta"
+{txt}(label treatment already defined)
+(label gender already defined)
+(label occup already defined)
+(label castecode already defined)
+(label standard already defined)
+(label yesno already defined)
+(label yes1no0 already defined)
+
+{com}. sum income age surveytime
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 6}income {c |}{res}      1,001    2505.863    1026.513          0       6051
+{txt}{space 9}age {c |}{res}      1,000     334.636    691.6502         18       1990
+{txt}{space 2}surveytime {c |}{res}      1,001    7196.041    984.4501       3757      10208
+
+{com}. replace age = 54 if age == 1981
+{txt}(13 real changes made)
+
+{com}. replace age = 54 if age == 1971
+{txt}(8 real changes made)
+
+{com}. 
+.     replace age = 53 if age == 1980
+{txt}(6 real changes made)
+
+{com}. 
+.     replace age = 53 if age == 1970
+{txt}(7 real changes made)
+
+{com}. 
+.     replace age = 50 if age == 1973
+{txt}(4 real changes made)
+
+{com}. 
+.     replace age = 49 if age == 1972
+{txt}(8 real changes made)
+
+{com}. 
+.     replace age = 48 if age == 1975
+{txt}(5 real changes made)
+
+{com}. 
+.     replace age = 47 if age == 1976
+{txt}(6 real changes made)
+
+{com}. 
+.     replace age = 47 if age == 1974
+{txt}(5 real changes made)
+
+{com}. 
+.     replace age = 46 if age == 1978
+{txt}(5 real changes made)
+
+{com}. 
+.     replace age = 46 if age == 1977
+{txt}(11 real changes made)
+
+{com}. 
+.     replace age = 45 if age == 1978
+{txt}(0 real changes made)
+
+{com}. 
+.     replace age = 44 if age == 1982
+{txt}(8 real changes made)
+
+{com}. 
+.     replace age = 42 if age == 1979
+{txt}(12 real changes made)
+
+{com}. 
+.     replace age = 40 if age == 1983
+{txt}(8 real changes made)
+
+{com}. 
+.     replace age = 39 if age == 1984
+{txt}(5 real changes made)
+
+{com}. 
+.     replace age = 38 if age == 1985
+{txt}(10 real changes made)
+
+{com}. 
+.     replace age = 37 if age == 1986
+{txt}(9 real changes made)
+
+{com}. 
+.     replace age = 34 if age == 1989
+{txt}(6 real changes made)
+
+{com}. 
+.     replace age = 33 if age == 1990
+{txt}(6 real changes made)
+
+{com}. 
+.     replace age = 30 if age == 1987
+{txt}(3 real changes made)
+
+{com}. 
+.     replace age = 29 if age == 1988
+{txt}(5 real changes made)
+
+{com}. sum age
+
+{txt}    Variable {c |}        Obs        Mean    Std. Dev.       Min        Max
+{hline 13}{c +}{hline 57}
+{space 9}age {c |}{res}      1,000      44.281    14.88542         18         90
+
+{com}. sort hhid
+
+. duplicates report hhid
+
+{p 0 4}{txt}Duplicates in terms of {res} hhid{p_end}
+
+{txt}{hline 10}{c TT}{hline 27}
+   copies {c |} observations       surplus
+{hline 10}{c +}{hline 27}
+        1 {c |}          {res}995             0
+        {txt}2 {c |}            {res}6             3
+{txt}{hline 10}{c BT}{hline 27}
+
+{com}. gen hhid_new = hhid
+
+. gen suffix = 1
+
+. foreach val in 2 3 4 {c -(}
+{txt}  2{com}. 
+.     replace hhid_new = hhid + "-" + suffix if copies == `val'
+{txt}  3{com}. 
+.     local suffix = suffix + 1
+{txt}  4{com}. 
+. {c )-}
+{err}type mismatch
+{txt}{search r(109), local:r(109);}
+
+{com}. foreach val in 2 3 4 {c -(}
+{txt}  2{com}. 
+.     replace hhid_new = hhid + "-" + suffix if copies == `val'
+{txt}  3{com}. 
+.     local suffix = suffix + 1{c )-}
+{err}type mismatch
+{txt}{search r(109), local:r(109);}
+
+{com}. foreach val in 2 3 4 {c -(}replace hhid_new = hhid + "-" + suffix if copies == `val' local suffix = suffix + 1{c )-}
+{err}program error:  code follows on the same line as open brace
+{txt}{search r(198), local:r(198);}
+
+{com}. drop hhid_new
+
+. drop suffix
+
+. bysort hhid: gen suffix = _n
+
+. replace new_hhid = hhid + "-" + string(suffix) if suffix > 1
+{err}variable {bf}new_hhid{sf} not found
+{txt}{search r(111), local:r(111);}
+
+{com}. egen new_hhid = group(hhid)
+
+. replace new_hhid = hhid + "-" + string(suffix) if suffix > 1
+{err}type mismatch
+{txt}{search r(109), local:r(109);}
+
+{com}. egen new_hhid = group(hhid)
+{err}variable {bf}new_hhid{sf} already defined
+{txt}{search r(110), local:r(110);}
+
+{com}. bysort hhid: gen suffix = _n
+{err}variable {bf}suffix{sf} already defined
+{txt}{search r(110), local:r(110);}
+
+{com}. replace new_hhid = hhid + "-" + string(suffix) if suffix > 1
+{err}type mismatch
+{txt}{search r(109), local:r(109);}
+
+{com}. egen new_hhid = group(hhid)
+{err}variable {bf}new_hhid{sf} already defined
+{txt}{search r(110), local:r(110);}
+
+{com}. 
+. bysort hhid: gen suffix = _n
+{err}variable {bf}suffix{sf} already defined
+{txt}{search r(110), local:r(110);}
+
+{com}. 
+. replace new_hhid = hhid + "-" + string(suffix) if suffix > 1
+{err}type mismatch
+{txt}{search r(109), local:r(109);}
+
+{com}. drop suffix new_hhid
+
+. egen new_hhid = group(hhid)
+
+. 
+. bysort hhid: gen suffix = _n
+
+. gen new_hhid = hhid
+{err}variable {bf}new_hhid{sf} already defined
+{txt}{search r(110), local:r(110);}
+
+{com}. replace new_hhid = strcat(new_hhid, "-", string(suffix)) if suffix > 1
+{err}unknown function strcat()
+{txt}{search r(133), local:r(133);}
+
+{com}. replace new_hhid = hhid + "-" + string(suffix) if suffix > 1
+{err}type mismatch
+{txt}{search r(109), local:r(109);}
+
+{com}. replace new_hhid = hhid + "-" + suffix if suffix > 1
+{err}type mismatch
+{txt}{search r(109), local:r(109);}
+
+{com}. replace new_hhid = hhid  + string(suffix) if suffix > 1
+{err}type mismatch
+{txt}{search r(109), local:r(109);}
+
+{com}. 

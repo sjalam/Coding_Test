@@ -1,0 +1,42 @@
+\documentclass[10pt,a4paper,twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\author{S.J.Alam}
+\title{Introduction to Latex}
+
+\usepackage{booktabs}
+\usepackage{dcolumn}
+\usepackage{geometry}
+
+
+\newcommand{\ignore}[1]{}
+\begin{document}
+\maketitle
+Hello this is Nishith Sir's Test output of summary statistics table.
+
+
+\begin{table}[htbp]\centering
+\def\sym#1{\ifmmode^{#1}\else\(^{#1}\)\fi}
+\caption{Descriptive Statistics}
+\begin{tabular}{l*{1}{rrr}}
+\toprule
+                    &\multicolumn{3}{c}{}                  \\
+                    &        Mean&          SD&      Median\\
+\midrule
+Income              &     2505.86&     1026.51&     2455.00\\
+Age                 &       44.28&       14.89&       42.50\\
+Length of Survey (in seconds)&     7196.04&      984.45&     7162.00\\
+\midrule
+Observations        &        1001&            &            \\
+\bottomrule
+\multicolumn{4}{l}{\footnotesize Source Nishith sir's Test}\\
+\end{tabular}
+\end{table}
+
+
+
+\end{document}
